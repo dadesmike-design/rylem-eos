@@ -1,17 +1,24 @@
-/* ===== RYLEM EOS — Main Application ===== */
+/* ===== RYLEM EOS — Main Application (Multi-Team) ===== */
 (function() {
 'use strict';
 
 const STORAGE_KEY = 'rylem_eos';
+const TEAM_KEY = 'rylem_eos_team';
 let DATA = null;
 let currentModule = 'scorecard';
-let meetingState = null; // active meeting state
+let currentTeamId = localStorage.getItem(TEAM_KEY) || 'leadership';
+let meetingState = null;
 
 // ===== DATA LAYER =====
 async function loadData() {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
     DATA = JSON.parse(stored);
+    // Migration: if old flat format, convert
+    if (DATA.team && !DATA.teams) {
+      DATA = migrateToMultiTeam(DATA);
+      saveData();
+    }
   } else {
     const resp = await fetch('data/seed.json');
     DATA = await resp.json();
@@ -19,12 +26,145 @@ async function loadData() {
   }
 }
 
+function migrateToMultiTeam(old) {
+  // Wrap old single-team data into new multi-team format
+  return {
+    teams: [{
+      id: 'leadership',
+      name: old.team.name,
+      members: old.team.members,
+      scorecard: old.scorecard,
+      rocks: old.rocks,
+      todos: old.todos,
+      issues: old.issues,
+      meetings: old.meetings || []
+    }],
+    vto: old.vto,
+    accountability: old.accountability
+  };
+}
+
 function saveData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
 }
 
+function getTeam(teamId) {
+  return DATA.teams.find(t => t.id === teamId);
+}
+
+function currentTeam() {
+  return getTeam(currentTeamId);
+}
+
+// Get all unique members across all teams (for "All" view)
+function getAllMembers() {
+  const seen = {};
+  const all = [];
+  DATA.teams.forEach(t => {
+    t.members.forEach(m => {
+      if (!seen[m.id]) { seen[m.id] = true; all.push(m); }
+    });
+  });
+  return all;
+}
+
+// Get members for current context
+function getActiveMembers() {
+  if (currentTeamId === 'all') return getAllMembers();
+  const team = currentTeam();
+  return team ? team.members : [];
+}
+
 function getMember(id) {
-  return DATA.team.members.find(m => m.id === id) || { name: id, initials: '??', color: '#666' };
+  // Search current team first, then all teams
+  const members = getActiveMembers();
+  let m = members.find(m => m.id === id);
+  if (m) return m;
+  // Fallback: search all teams
+  for (const t of DATA.teams) {
+    m = t.members.find(m => m.id === id);
+    if (m) return m;
+  }
+  return { name: id, initials: '??', color: '#666' };
+}
+
+// Per-team data accessors (aggregate for "All")
+function getScorecard() {
+  if (currentTeamId === 'all') {
+    // Merge all scorecards
+    const merged = { trailingWeeks: 13, measurables: [], entries: {} };
+    DATA.teams.forEach(t => {
+      t.scorecard.measurables.forEach(m => {
+        merged.measurables.push({ ...m, _teamName: t.name });
+      });
+      Object.assign(merged.entries, t.scorecard.entries);
+    });
+    return merged;
+  }
+  const team = currentTeam();
+  return team ? team.scorecard : { trailingWeeks: 13, measurables: [], entries: {} };
+}
+
+function getRocks() {
+  if (currentTeamId === 'all') {
+    const all = [];
+    DATA.teams.forEach(t => { t.rocks.forEach(r => all.push({ ...r, _teamName: t.name })); });
+    return all;
+  }
+  const team = currentTeam();
+  return team ? team.rocks : [];
+}
+
+function getTodos() {
+  if (currentTeamId === 'all') {
+    const all = [];
+    DATA.teams.forEach(t => { t.todos.forEach(td => all.push({ ...td, _teamName: t.name })); });
+    return all;
+  }
+  const team = currentTeam();
+  return team ? team.todos : [];
+}
+
+function getIssues() {
+  if (currentTeamId === 'all') {
+    const merged = { shortTerm: [], longTerm: [] };
+    DATA.teams.forEach(t => {
+      if (t.issues) {
+        (t.issues.shortTerm || []).forEach(i => merged.shortTerm.push({ ...i, _teamName: t.name }));
+        (t.issues.longTerm || []).forEach(i => merged.longTerm.push({ ...i, _teamName: t.name }));
+      }
+    });
+    return merged;
+  }
+  const team = currentTeam();
+  return team ? (team.issues || { shortTerm: [], longTerm: [] }) : { shortTerm: [], longTerm: [] };
+}
+
+function getMeetings() {
+  if (currentTeamId === 'all') {
+    const all = [];
+    DATA.teams.forEach(t => { (t.meetings || []).forEach(m => all.push({ ...m, _teamName: t.name })); });
+    return all.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  }
+  const team = currentTeam();
+  return team ? (team.meetings || []) : [];
+}
+
+// Mutators — always operate on the specific team
+function findRockSource(rockId) {
+  for (const t of DATA.teams) {
+    const idx = t.rocks.findIndex(r => r.id === rockId);
+    if (idx >= 0) return { team: t, index: idx, rock: t.rocks[idx] };
+  }
+  return null;
+}
+
+function findTodoSource(todoId) {
+  for (const t of DATA.teams) {
+    const idx = t.todos.findIndex(td => td.id === todoId);
+    if (idx >= 0) return { team: t, index: idx, todo: t.todos[idx] };
+  }
+  return null;
 }
 
 function generateId() {
@@ -65,6 +205,19 @@ function escapeHtml(s) {
   const div = document.createElement('div');
   div.textContent = s;
   return div.innerHTML;
+}
+
+// ===== TEAM SWITCHER =====
+function initTeamSwitcher() {
+  const sel = document.getElementById('teamSwitcher');
+  sel.innerHTML = '<option value="all">All Teams</option>' +
+    DATA.teams.map(t => `<option value="${t.id}">${escapeHtml(t.name)}</option>`).join('');
+  sel.value = currentTeamId;
+  sel.addEventListener('change', () => {
+    currentTeamId = sel.value;
+    localStorage.setItem(TEAM_KEY, currentTeamId);
+    renderModule();
+  });
 }
 
 // ===== NAVIGATION =====
@@ -131,15 +284,17 @@ function closeModal() {
 
 // ===== MODULE 1: SCORECARD =====
 function renderScorecard(el) {
-  const weeks = getTrailingWeeks(DATA.scorecard.trailingWeeks || 13);
-  const entries = DATA.scorecard.entries || {};
+  const scorecard = getScorecard();
+  const weeks = getTrailingWeeks(scorecard.trailingWeeks || 13);
+  const entries = scorecard.entries || {};
+  const isAll = currentTeamId === 'all';
 
   let weekHeaders = weeks.map(w => {
     const d = new Date(w + 'T00:00:00');
     return `<th class="week-header">${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</th>`;
   }).join('');
 
-  let rows = DATA.scorecard.measurables.map(m => {
+  let rows = scorecard.measurables.map(m => {
     const member = getMember(m.owner);
     const goalSymbol = m.goalType === 'gte' ? '>=' : m.goalType === 'lte' ? '<=' : '=';
 
@@ -158,16 +313,16 @@ function renderScorecard(el) {
       return `<td class="scorecard-cell ${cls}" data-key="${key}" data-measurable="${m.id}" data-week="${w}">${val !== undefined && val !== null && val !== '' ? val : ''}</td>`;
     }).join('');
 
-    // Calculate average
     let sum = 0, count = 0;
     weeks.forEach(w => {
       const v = parseFloat(entries[`${m.id}_${w}`]);
       if (!isNaN(v)) { sum += v; count++; }
     });
     const avg = count > 0 ? (sum / count).toFixed(1) : '-';
+    const teamLabel = m._teamName ? `<span style="color:#555;font-size:0.75rem;margin-left:6px">${escapeHtml(m._teamName)}</span>` : '';
 
     return `<tr>
-      <td class="measurable-name">${escapeHtml(m.title)}</td>
+      <td class="measurable-name">${escapeHtml(m.title)}${teamLabel}</td>
       <td class="owner-cell">${escapeHtml(member.name.split(' ')[0])}</td>
       <td class="goal-cell">${goalSymbol} ${m.goal}</td>
       <td class="avg-cell">${avg}</td>
@@ -175,15 +330,17 @@ function renderScorecard(el) {
     </tr>`;
   }).join('');
 
+  const members = getActiveMembers();
+
   el.innerHTML = `
     <div class="toolbar">
       <select class="filter-select week-select" id="weekCountSelect">
-        <option value="6" ${DATA.scorecard.trailingWeeks === 6 ? 'selected' : ''}>6 weeks</option>
-        <option value="13" ${DATA.scorecard.trailingWeeks === 13 ? 'selected' : ''}>13 weeks</option>
-        <option value="26" ${DATA.scorecard.trailingWeeks === 26 ? 'selected' : ''}>26 weeks</option>
+        <option value="6" ${scorecard.trailingWeeks === 6 ? 'selected' : ''}>6 weeks</option>
+        <option value="13" ${scorecard.trailingWeeks === 13 ? 'selected' : ''}>13 weeks</option>
+        <option value="26" ${scorecard.trailingWeeks === 26 ? 'selected' : ''}>26 weeks</option>
       </select>
       <div class="toolbar-spacer"></div>
-      <button class="btn btn-primary btn-sm" id="addMeasurableBtn">+ Measurable</button>
+      ${!isAll ? '<button class="btn btn-primary btn-sm" id="addMeasurableBtn">+ Measurable</button>' : ''}
     </div>
     <div class="card scorecard-wrap">
       <table class="scorecard-table">
@@ -200,67 +357,75 @@ function renderScorecard(el) {
       </table>
     </div>`;
 
-  // Week count selector
   document.getElementById('weekCountSelect').addEventListener('change', e => {
-    DATA.scorecard.trailingWeeks = parseInt(e.target.value);
+    const val = parseInt(e.target.value);
+    if (isAll) {
+      DATA.teams.forEach(t => { t.scorecard.trailingWeeks = val; });
+    } else {
+      currentTeam().scorecard.trailingWeeks = val;
+    }
     saveData();
     renderScorecard(el);
   });
 
-  // Add measurable
-  document.getElementById('addMeasurableBtn').addEventListener('click', () => {
-    openModal(`
-      <div class="modal-header"><h2>Add Measurable</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
-      <div class="modal-body">
-        <div class="form-group"><label>Title</label><input id="mTitle" placeholder="e.g. Revenue"></div>
-        <div class="form-group"><label>Owner</label><select id="mOwner">${DATA.team.members.map(m => `<option value="${m.id}">${m.name}</option>`).join('')}</select></div>
-        <div class="form-group"><label>Goal Type</label><select id="mGoalType"><option value="gte">>= (at least)</option><option value="lte"><= (at most)</option><option value="eq">= (exactly)</option></select></div>
-        <div class="form-group"><label>Goal Value</label><input id="mGoal" type="number" placeholder="0"></div>
-      </div>
-      <div class="modal-footer"><button class="btn btn-secondary" onclick="document.getElementById('modal').style.display='none'">Cancel</button><button class="btn btn-primary" id="saveMeasurable">Save</button></div>
-    `);
-    document.getElementById('saveMeasurable').addEventListener('click', () => {
-      const title = document.getElementById('mTitle').value.trim();
-      if (!title) return;
-      DATA.scorecard.measurables.push({
-        id: 'sc' + generateId(),
-        title,
-        owner: document.getElementById('mOwner').value,
-        goal: parseFloat(document.getElementById('mGoal').value) || 0,
-        goalType: document.getElementById('mGoalType').value,
-        unit: ''
-      });
-      saveData();
-      closeModal();
-      renderScorecard(el);
-    });
-  });
-
-  // Click to edit cells
-  el.querySelectorAll('.scorecard-cell').forEach(cell => {
-    cell.addEventListener('click', () => {
-      if (cell.querySelector('input')) return;
-      const key = cell.dataset.key;
-      const currentVal = DATA.scorecard.entries[key] || '';
-      cell.innerHTML = `<input type="number" value="${currentVal}" step="any">`;
-      const inp = cell.querySelector('input');
-      inp.focus();
-      inp.select();
-      const finish = () => {
-        const v = inp.value.trim();
-        if (v === '') {
-          delete DATA.scorecard.entries[key];
-        } else {
-          if (!DATA.scorecard.entries) DATA.scorecard.entries = {};
-          DATA.scorecard.entries[key] = parseFloat(v);
-        }
+  if (!isAll) {
+    document.getElementById('addMeasurableBtn').addEventListener('click', () => {
+      openModal(`
+        <div class="modal-header"><h2>Add Measurable</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
+        <div class="modal-body">
+          <div class="form-group"><label>Title</label><input id="mTitle" placeholder="e.g. Revenue"></div>
+          <div class="form-group"><label>Owner</label><select id="mOwner">${members.map(m => `<option value="${m.id}">${m.name}</option>`).join('')}</select></div>
+          <div class="form-group"><label>Goal Type</label><select id="mGoalType"><option value="gte">>= (at least)</option><option value="lte"><= (at most)</option><option value="eq">= (exactly)</option></select></div>
+          <div class="form-group"><label>Goal Value</label><input id="mGoal" type="number" placeholder="0"></div>
+        </div>
+        <div class="modal-footer"><button class="btn btn-secondary" onclick="document.getElementById('modal').style.display='none'">Cancel</button><button class="btn btn-primary" id="saveMeasurable">Save</button></div>
+      `);
+      document.getElementById('saveMeasurable').addEventListener('click', () => {
+        const title = document.getElementById('mTitle').value.trim();
+        if (!title) return;
+        currentTeam().scorecard.measurables.push({
+          id: 'sc' + generateId(),
+          title,
+          owner: document.getElementById('mOwner').value,
+          goal: parseFloat(document.getElementById('mGoal').value) || 0,
+          goalType: document.getElementById('mGoalType').value,
+          unit: ''
+        });
         saveData();
+        closeModal();
         renderScorecard(el);
-      };
-      inp.addEventListener('blur', finish);
-      inp.addEventListener('keydown', e => { if (e.key === 'Enter') inp.blur(); if (e.key === 'Escape') { inp.value = currentVal; inp.blur(); } });
+      });
     });
-  });
+  }
+
+  // Click to edit cells (only for specific team)
+  if (!isAll) {
+    el.querySelectorAll('.scorecard-cell').forEach(cell => {
+      cell.addEventListener('click', () => {
+        if (cell.querySelector('input')) return;
+        const key = cell.dataset.key;
+        const sc = currentTeam().scorecard;
+        const currentVal = sc.entries[key] || '';
+        cell.innerHTML = `<input type="number" value="${currentVal}" step="any">`;
+        const inp = cell.querySelector('input');
+        inp.focus();
+        inp.select();
+        const finish = () => {
+          const v = inp.value.trim();
+          if (v === '') {
+            delete sc.entries[key];
+          } else {
+            if (!sc.entries) sc.entries = {};
+            sc.entries[key] = parseFloat(v);
+          }
+          saveData();
+          renderScorecard(el);
+        };
+        inp.addEventListener('blur', finish);
+        inp.addEventListener('keydown', e => { if (e.key === 'Enter') inp.blur(); if (e.key === 'Escape') { inp.value = currentVal; inp.blur(); } });
+      });
+    });
+  }
 }
 
 // ===== MODULE 2: ROCKS =====
@@ -268,7 +433,9 @@ let rocksFilter = { status: 'all', owner: 'all' };
 let rocksTab = 'active';
 
 function renderRocks(el) {
-  const rocks = DATA.rocks.filter(r => {
+  const allRocks = getRocks();
+  const isAll = currentTeamId === 'all';
+  const rocks = allRocks.filter(r => {
     if (rocksTab === 'active' && r.archived) return false;
     if (rocksTab === 'archived' && !r.archived) return false;
     if (rocksFilter.status !== 'all' && r.status !== rocksFilter.status) return false;
@@ -276,33 +443,35 @@ function renderRocks(el) {
     return true;
   });
 
-  // Group by owner
   const grouped = {};
   rocks.forEach(r => {
     if (!grouped[r.owner]) grouped[r.owner] = [];
     grouped[r.owner].push(r);
   });
 
+  const members = getActiveMembers();
+
   let groupsHtml = Object.entries(grouped).map(([ownerId, ownerRocks]) => {
     const member = getMember(ownerId);
     const rockItems = ownerRocks.map(r => {
       const statusCls = `status-${r.status.replace(' ', '-')}`;
+      const teamLabel = r._teamName ? ` <span style="color:#555;font-size:0.75rem">[${escapeHtml(r._teamName)}]</span>` : '';
       const milestoneHtml = r.milestones && r.milestones.length > 0 ? `
         <div class="milestones">${r.milestones.map((ms, i) => `
           <div class="milestone-item ${ms.done ? 'done' : ''}">
-            <input type="checkbox" ${ms.done ? 'checked' : ''} data-rock="${r.id}" data-ms="${i}">
+            <input type="checkbox" ${ms.done ? 'checked' : ''} data-rock="${r.id}" data-ms="${i}" ${isAll ? 'disabled' : ''}>
             <span>${escapeHtml(ms.title)}</span>
           </div>`).join('')}
         </div>` : '';
       return `<div class="rock-item" data-rock-id="${r.id}">
-        <div class="rock-title">${escapeHtml(r.title)}</div>
+        <div class="rock-title">${escapeHtml(r.title)}${teamLabel}</div>
         <span class="rock-due">${formatDate(r.dueDate)}</span>
-        <select class="filter-select rock-status-select" data-rock-id="${r.id}">
+        <select class="filter-select rock-status-select" data-rock-id="${r.id}" ${isAll ? 'disabled' : ''}>
           <option value="on-track" ${r.status === 'on-track' ? 'selected' : ''}>On Track</option>
           <option value="off-track" ${r.status === 'off-track' ? 'selected' : ''}>Off Track</option>
           <option value="complete" ${r.status === 'complete' ? 'selected' : ''}>Complete</option>
         </select>
-        <button class="btn-icon" title="Edit" data-edit-rock="${r.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+        ${!isAll ? `<button class="btn-icon" title="Edit" data-edit-rock="${r.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>` : ''}
       </div>${milestoneHtml}`;
     }).join('');
 
@@ -332,64 +501,62 @@ function renderRocks(el) {
       </select>
       <select class="filter-select" id="rockFilterOwner">
         <option value="all">All Owners</option>
-        ${DATA.team.members.map(m => `<option value="${m.id}" ${rocksFilter.owner === m.id ? 'selected' : ''}>${m.name}</option>`).join('')}
+        ${members.map(m => `<option value="${m.id}" ${rocksFilter.owner === m.id ? 'selected' : ''}>${m.name}</option>`).join('')}
       </select>
       <div class="toolbar-spacer"></div>
-      <button class="btn btn-primary btn-sm" id="addRockBtn">+ Rock</button>
+      ${!isAll ? '<button class="btn btn-primary btn-sm" id="addRockBtn">+ Rock</button>' : ''}
     </div>
     ${groupsHtml}`;
 
-  // Tab switching
   el.querySelectorAll('[data-rocks-tab]').forEach(t => {
     t.addEventListener('click', () => { rocksTab = t.dataset.rocksTab; renderRocks(el); });
   });
 
-  // Filters
   document.getElementById('rockFilterStatus').addEventListener('change', e => { rocksFilter.status = e.target.value; renderRocks(el); });
   document.getElementById('rockFilterOwner').addEventListener('change', e => { rocksFilter.owner = e.target.value; renderRocks(el); });
 
-  // Status dropdowns
-  el.querySelectorAll('.rock-status-select').forEach(sel => {
-    sel.addEventListener('change', e => {
-      e.stopPropagation();
-      const rock = DATA.rocks.find(r => r.id === sel.dataset.rockId);
-      if (rock) { rock.status = sel.value; saveData(); renderRocks(el); }
+  if (!isAll) {
+    el.querySelectorAll('.rock-status-select').forEach(sel => {
+      sel.addEventListener('change', e => {
+        e.stopPropagation();
+        const src = findRockSource(sel.dataset.rockId);
+        if (src) { src.rock.status = sel.value; saveData(); renderRocks(el); }
+      });
     });
-  });
 
-  // Edit rock buttons
-  el.querySelectorAll('[data-edit-rock]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      openRockModal(btn.dataset.editRock, el);
+    el.querySelectorAll('[data-edit-rock]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        openRockModal(btn.dataset.editRock, el);
+      });
     });
-  });
 
-  // Milestone checkboxes
-  el.querySelectorAll('.milestone-item input[type="checkbox"]').forEach(cb => {
-    cb.addEventListener('change', () => {
-      const rock = DATA.rocks.find(r => r.id === cb.dataset.rock);
-      if (rock && rock.milestones[cb.dataset.ms]) {
-        rock.milestones[cb.dataset.ms].done = cb.checked;
-        saveData();
-      }
+    el.querySelectorAll('.milestone-item input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const src = findRockSource(cb.dataset.rock);
+        if (src && src.rock.milestones[cb.dataset.ms]) {
+          src.rock.milestones[cb.dataset.ms].done = cb.checked;
+          saveData();
+        }
+      });
     });
-  });
 
-  // Add rock
-  document.getElementById('addRockBtn').addEventListener('click', () => openRockModal(null, el));
+    document.getElementById('addRockBtn')?.addEventListener('click', () => openRockModal(null, el));
+  }
 }
 
 function openRockModal(rockId, parentEl) {
-  const rock = rockId ? DATA.rocks.find(r => r.id === rockId) : null;
+  const src = rockId ? findRockSource(rockId) : null;
+  const rock = src ? src.rock : null;
   const isEdit = !!rock;
+  const members = getActiveMembers();
   const milestonesJson = rock && rock.milestones ? rock.milestones.map(m => m.title).join('\n') : '';
 
   openModal(`
     <div class="modal-header"><h2>${isEdit ? 'Edit' : 'Add'} Rock</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
     <div class="modal-body">
       <div class="form-group"><label>Title</label><input id="rTitle" value="${isEdit ? escapeHtml(rock.title) : ''}"></div>
-      <div class="form-group"><label>Owner</label><select id="rOwner">${DATA.team.members.map(m => `<option value="${m.id}" ${isEdit && rock.owner === m.id ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div>
+      <div class="form-group"><label>Owner</label><select id="rOwner">${members.map(m => `<option value="${m.id}" ${isEdit && rock.owner === m.id ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div>
       <div class="form-group"><label>Due Date</label><input id="rDue" type="date" value="${isEdit ? rock.dueDate : ''}"></div>
       <div class="form-group"><label>Status</label><select id="rStatus"><option value="on-track" ${isEdit && rock.status === 'on-track' ? 'selected' : ''}>On Track</option><option value="off-track" ${isEdit && rock.status === 'off-track' ? 'selected' : ''}>Off Track</option><option value="complete" ${isEdit && rock.status === 'complete' ? 'selected' : ''}>Complete</option></select></div>
       <div class="form-group"><label>Milestones (one per line)</label><textarea id="rMilestones" placeholder="Milestone 1&#10;Milestone 2">${milestonesJson}</textarea></div>
@@ -419,7 +586,7 @@ function openRockModal(rockId, parentEl) {
       rock.milestones = milestones;
       rock.archived = document.getElementById('rArchived')?.checked || false;
     } else {
-      DATA.rocks.push({
+      currentTeam().rocks.push({
         id: 'r' + generateId(),
         title, owner: document.getElementById('rOwner').value,
         status: document.getElementById('rStatus').value,
@@ -432,7 +599,7 @@ function openRockModal(rockId, parentEl) {
 
   if (isEdit) {
     document.getElementById('deleteRock').addEventListener('click', () => {
-      DATA.rocks = DATA.rocks.filter(r => r.id !== rockId);
+      src.team.rocks.splice(src.index, 1);
       saveData(); closeModal(); renderRocks(parentEl);
     });
   }
@@ -442,7 +609,9 @@ function openRockModal(rockId, parentEl) {
 let todosTab = 'team';
 
 function renderTodos(el) {
-  const todos = DATA.todos.filter(t => {
+  const allTodos = getTodos();
+  const isAll = currentTeamId === 'all';
+  const todos = allTodos.filter(t => {
     if (todosTab === 'team' && t.type !== 'team') return false;
     if (todosTab === 'personal' && t.type !== 'personal') return false;
     if (todosTab === 'archived' && !t.archived) return false;
@@ -453,14 +622,17 @@ function renderTodos(el) {
     return (a.dueDate || '').localeCompare(b.dueDate || '');
   });
 
+  const members = getActiveMembers();
+
   const todoItems = todos.map(t => {
     const member = getMember(t.owner);
+    const teamLabel = t._teamName ? ` <span style="color:#555;font-size:0.75rem">[${escapeHtml(t._teamName)}]</span>` : '';
     return `<div class="todo-item ${t.completed ? 'completed' : ''}">
-      <input type="checkbox" ${t.completed ? 'checked' : ''} data-todo-id="${t.id}">
-      <span class="todo-title">${escapeHtml(t.title)}</span>
+      <input type="checkbox" ${t.completed ? 'checked' : ''} data-todo-id="${t.id}" ${isAll ? 'disabled' : ''}>
+      <span class="todo-title">${escapeHtml(t.title)}${teamLabel}</span>
       <span class="todo-owner">${escapeHtml(member.name.split(' ')[0])}</span>
       <span class="todo-due">${formatDate(t.dueDate)}</span>
-      <button class="btn-icon todo-delete" data-delete-todo="${t.id}" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      ${!isAll ? `<button class="btn-icon todo-delete" data-delete-todo="${t.id}" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M18 6L6 18M6 6l12 12"/></svg></button>` : ''}
     </div>`;
   }).join('');
 
@@ -472,83 +644,83 @@ function renderTodos(el) {
     </div>
     <div class="toolbar">
       <div class="toolbar-spacer"></div>
-      <button class="btn btn-secondary btn-sm" id="archiveCompletedTodos">Archive Completed</button>
-      <button class="btn btn-primary btn-sm" id="addTodoBtn">+ To-Do</button>
+      ${!isAll ? '<button class="btn btn-secondary btn-sm" id="archiveCompletedTodos">Archive Completed</button>' : ''}
+      ${!isAll ? '<button class="btn btn-primary btn-sm" id="addTodoBtn">+ To-Do</button>' : ''}
     </div>
     ${todoItems || '<div class="empty-state"><p>No to-dos yet.</p></div>'}`;
 
-  // Tab switching
   el.querySelectorAll('[data-todos-tab]').forEach(t => {
     t.addEventListener('click', () => { todosTab = t.dataset.todosTab; renderTodos(el); });
   });
 
-  // Checkboxes
-  el.querySelectorAll('input[data-todo-id]').forEach(cb => {
-    cb.addEventListener('change', () => {
-      const todo = DATA.todos.find(t => t.id === cb.dataset.todoId);
-      if (todo) { todo.completed = cb.checked; saveData(); renderTodos(el); }
+  if (!isAll) {
+    el.querySelectorAll('input[data-todo-id]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const src = findTodoSource(cb.dataset.todoId);
+        if (src) { src.todo.completed = cb.checked; saveData(); renderTodos(el); }
+      });
     });
-  });
 
-  // Delete
-  el.querySelectorAll('[data-delete-todo]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      DATA.todos = DATA.todos.filter(t => t.id !== btn.dataset.deleteTodo);
+    el.querySelectorAll('[data-delete-todo]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const src = findTodoSource(btn.dataset.deleteTodo);
+        if (src) { src.team.todos.splice(src.index, 1); saveData(); renderTodos(el); }
+      });
+    });
+
+    document.getElementById('archiveCompletedTodos')?.addEventListener('click', () => {
+      currentTeam().todos.forEach(t => { if (t.completed && !t.archived) t.archived = true; });
       saveData(); renderTodos(el);
     });
-  });
 
-  // Archive completed
-  document.getElementById('archiveCompletedTodos').addEventListener('click', () => {
-    DATA.todos.forEach(t => { if (t.completed && !t.archived) t.archived = true; });
-    saveData(); renderTodos(el);
-  });
-
-  // Add todo
-  document.getElementById('addTodoBtn').addEventListener('click', () => {
-    openModal(`
-      <div class="modal-header"><h2>Add To-Do</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
-      <div class="modal-body">
-        <div class="form-group"><label>Title</label><input id="tdTitle"></div>
-        <div class="form-group"><label>Owner</label><select id="tdOwner">${DATA.team.members.map(m => `<option value="${m.id}">${m.name}</option>`).join('')}</select></div>
-        <div class="form-group"><label>Due Date</label><input id="tdDue" type="date"></div>
-        <div class="form-group"><label>Type</label><select id="tdType"><option value="team">Team</option><option value="personal">Personal</option></select></div>
-      </div>
-      <div class="modal-footer"><button class="btn btn-secondary" onclick="document.getElementById('modal').style.display='none'">Cancel</button><button class="btn btn-primary" id="saveTodo">Save</button></div>
-    `);
-    document.getElementById('saveTodo').addEventListener('click', () => {
-      const title = document.getElementById('tdTitle').value.trim();
-      if (!title) return;
-      DATA.todos.push({
-        id: 't' + generateId(), title,
-        owner: document.getElementById('tdOwner').value,
-        createdBy: 'md', dueDate: document.getElementById('tdDue').value,
-        completed: false, archived: false, type: document.getElementById('tdType').value
+    document.getElementById('addTodoBtn')?.addEventListener('click', () => {
+      openModal(`
+        <div class="modal-header"><h2>Add To-Do</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
+        <div class="modal-body">
+          <div class="form-group"><label>Title</label><input id="tdTitle"></div>
+          <div class="form-group"><label>Owner</label><select id="tdOwner">${members.map(m => `<option value="${m.id}">${m.name}</option>`).join('')}</select></div>
+          <div class="form-group"><label>Due Date</label><input id="tdDue" type="date"></div>
+          <div class="form-group"><label>Type</label><select id="tdType"><option value="team">Team</option><option value="personal">Personal</option></select></div>
+        </div>
+        <div class="modal-footer"><button class="btn btn-secondary" onclick="document.getElementById('modal').style.display='none'">Cancel</button><button class="btn btn-primary" id="saveTodo">Save</button></div>
+      `);
+      document.getElementById('saveTodo').addEventListener('click', () => {
+        const title = document.getElementById('tdTitle').value.trim();
+        if (!title) return;
+        currentTeam().todos.push({
+          id: 't' + generateId(), title,
+          owner: document.getElementById('tdOwner').value,
+          createdBy: 'md', dueDate: document.getElementById('tdDue').value,
+          completed: false, archived: false, type: document.getElementById('tdType').value
+        });
+        saveData(); closeModal(); renderTodos(el);
       });
-      saveData(); closeModal(); renderTodos(el);
     });
-  });
+  }
 }
 
 // ===== MODULE 4: ISSUES =====
 let issuesTab = 'shortTerm';
 
 function renderIssues(el) {
-  if (!DATA.issues) DATA.issues = { shortTerm: [], longTerm: [] };
+  const issues = getIssues();
+  const isAll = currentTeamId === 'all';
   const listKey = issuesTab;
-  const issues = DATA.issues[listKey] || [];
+  const issueList = issues[listKey] || [];
+  const members = getActiveMembers();
 
-  const issueItems = issues.map((iss, idx) => {
+  const issueItems = issueList.map((iss, idx) => {
     const member = getMember(iss.owner || 'md');
-    return `<div class="issue-item" draggable="true" data-issue-idx="${idx}" data-issue-list="${listKey}">
-      <div class="issue-drag-handle"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></div>
-      <span class="issue-title">${escapeHtml(iss.title)}</span>
+    const teamLabel = iss._teamName ? ` <span style="color:#555;font-size:0.75rem">[${escapeHtml(iss._teamName)}]</span>` : '';
+    return `<div class="issue-item" ${!isAll ? 'draggable="true"' : ''} data-issue-idx="${idx}" data-issue-list="${listKey}">
+      ${!isAll ? '<div class="issue-drag-handle"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></div>' : ''}
+      <span class="issue-title">${escapeHtml(iss.title)}${teamLabel}</span>
       <span class="issue-owner">${escapeHtml(member.name.split(' ')[0])}</span>
       <span class="issue-priority priority-${iss.priority || 3}">P${iss.priority || 3}</span>
-      <div class="issue-actions">
+      ${!isAll ? `<div class="issue-actions">
         <button class="btn-icon" title="Edit" data-edit-issue="${idx}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
         <button class="btn btn-success btn-sm" data-solve-issue="${idx}" title="Solve">Solve</button>
-      </div>
+      </div>` : ''}
     </div>`;
   }).join('');
 
@@ -559,103 +731,101 @@ function renderIssues(el) {
     </div>
     <div class="toolbar">
       <div class="toolbar-spacer"></div>
-      <button class="btn btn-primary btn-sm" id="addIssueBtn">+ Issue</button>
+      ${!isAll ? '<button class="btn btn-primary btn-sm" id="addIssueBtn">+ Issue</button>' : ''}
     </div>
     <div id="issuesList">
       ${issueItems || '<div class="empty-state"><p>No issues. That\'s a good thing!</p></div>'}
     </div>`;
 
-  // Tab switching
   el.querySelectorAll('[data-issues-tab]').forEach(t => {
     t.addEventListener('click', () => { issuesTab = t.dataset.issuesTab; renderIssues(el); });
   });
 
-  // Drag and drop
-  const list = document.getElementById('issuesList');
-  let dragIdx = null;
+  if (!isAll) {
+    // Drag and drop
+    const list = document.getElementById('issuesList');
+    let dragIdx = null;
 
-  list.querySelectorAll('.issue-item').forEach(item => {
-    item.addEventListener('dragstart', e => {
-      dragIdx = parseInt(item.dataset.issueIdx);
-      item.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-    });
-    item.addEventListener('dragend', () => {
-      item.classList.remove('dragging');
-      list.querySelectorAll('.issue-item').forEach(i => i.classList.remove('drag-over'));
-      list.querySelectorAll('.drop-placeholder').forEach(p => p.remove());
-    });
-    item.addEventListener('dragover', e => {
-      e.preventDefault();
-      item.classList.add('drag-over');
-    });
-    item.addEventListener('dragleave', () => { item.classList.remove('drag-over'); });
-    item.addEventListener('drop', e => {
-      e.preventDefault();
-      const dropIdx = parseInt(item.dataset.issueIdx);
-      if (dragIdx !== null && dragIdx !== dropIdx) {
-        const arr = DATA.issues[listKey];
-        const moved = arr.splice(dragIdx, 1)[0];
-        arr.splice(dropIdx, 0, moved);
-        saveData();
-        renderIssues(el);
-      }
-    });
-  });
-
-  // Solve
-  el.querySelectorAll('[data-solve-issue]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = parseInt(btn.dataset.solveIssue);
-      const issue = DATA.issues[listKey][idx];
-      if (!issue) return;
-      // Optionally create a to-do
-      openModal(`
-        <div class="modal-header"><h2>Solve Issue</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
-        <div class="modal-body">
-          <p style="margin-bottom:12px">Issue: <strong>${escapeHtml(issue.title)}</strong></p>
-          <div class="form-group"><label><input type="checkbox" id="createTodoFromIssue" checked> Create a To-Do from this issue</label></div>
-          <div class="form-group"><label>To-Do Owner</label><select id="solveTodoOwner">${DATA.team.members.map(m => `<option value="${m.id}" ${issue.owner === m.id ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div>
-          <div class="form-group"><label>Due Date</label><input id="solveTodoDue" type="date"></div>
-        </div>
-        <div class="modal-footer"><button class="btn btn-secondary" onclick="document.getElementById('modal').style.display='none'">Cancel</button><button class="btn btn-success" id="confirmSolve">Solve</button></div>
-      `);
-      document.getElementById('confirmSolve').addEventListener('click', () => {
-        if (document.getElementById('createTodoFromIssue').checked) {
-          DATA.todos.push({
-            id: 't' + generateId(), title: issue.title,
-            owner: document.getElementById('solveTodoOwner').value,
-            createdBy: 'md', dueDate: document.getElementById('solveTodoDue').value,
-            completed: false, archived: false, type: 'team'
-          });
+    list.querySelectorAll('.issue-item').forEach(item => {
+      item.addEventListener('dragstart', e => {
+        dragIdx = parseInt(item.dataset.issueIdx);
+        item.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      item.addEventListener('dragend', () => {
+        item.classList.remove('dragging');
+        list.querySelectorAll('.issue-item').forEach(i => i.classList.remove('drag-over'));
+      });
+      item.addEventListener('dragover', e => { e.preventDefault(); item.classList.add('drag-over'); });
+      item.addEventListener('dragleave', () => { item.classList.remove('drag-over'); });
+      item.addEventListener('drop', e => {
+        e.preventDefault();
+        const dropIdx = parseInt(item.dataset.issueIdx);
+        if (dragIdx !== null && dragIdx !== dropIdx) {
+          const arr = currentTeam().issues[listKey];
+          const moved = arr.splice(dragIdx, 1)[0];
+          arr.splice(dropIdx, 0, moved);
+          saveData();
+          renderIssues(el);
         }
-        DATA.issues[listKey].splice(idx, 1);
-        saveData(); closeModal(); renderIssues(el);
       });
     });
-  });
 
-  // Edit issue
-  el.querySelectorAll('[data-edit-issue]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = parseInt(btn.dataset.editIssue);
-      openIssueModal(listKey, idx, el);
+    // Solve
+    el.querySelectorAll('[data-solve-issue]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.solveIssue);
+        const team = currentTeam();
+        const issue = team.issues[listKey][idx];
+        if (!issue) return;
+        openModal(`
+          <div class="modal-header"><h2>Solve Issue</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
+          <div class="modal-body">
+            <p style="margin-bottom:12px">Issue: <strong>${escapeHtml(issue.title)}</strong></p>
+            <div class="form-group"><label><input type="checkbox" id="createTodoFromIssue" checked> Create a To-Do from this issue</label></div>
+            <div class="form-group"><label>To-Do Owner</label><select id="solveTodoOwner">${members.map(m => `<option value="${m.id}" ${issue.owner === m.id ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div>
+            <div class="form-group"><label>Due Date</label><input id="solveTodoDue" type="date"></div>
+          </div>
+          <div class="modal-footer"><button class="btn btn-secondary" onclick="document.getElementById('modal').style.display='none'">Cancel</button><button class="btn btn-success" id="confirmSolve">Solve</button></div>
+        `);
+        document.getElementById('confirmSolve').addEventListener('click', () => {
+          if (document.getElementById('createTodoFromIssue').checked) {
+            team.todos.push({
+              id: 't' + generateId(), title: issue.title,
+              owner: document.getElementById('solveTodoOwner').value,
+              createdBy: 'md', dueDate: document.getElementById('solveTodoDue').value,
+              completed: false, archived: false, type: 'team'
+            });
+          }
+          team.issues[listKey].splice(idx, 1);
+          saveData(); closeModal(); renderIssues(el);
+        });
+      });
     });
-  });
 
-  // Add issue
-  document.getElementById('addIssueBtn').addEventListener('click', () => openIssueModal(listKey, null, el));
+    // Edit issue
+    el.querySelectorAll('[data-edit-issue]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.editIssue);
+        openIssueModal(listKey, idx, el);
+      });
+    });
+
+    document.getElementById('addIssueBtn')?.addEventListener('click', () => openIssueModal(listKey, null, el));
+  }
 }
 
 function openIssueModal(listKey, idx, parentEl) {
-  const issue = idx !== null ? DATA.issues[listKey][idx] : null;
+  const team = currentTeam();
+  const issue = idx !== null ? team.issues[listKey][idx] : null;
   const isEdit = !!issue;
+  const members = getActiveMembers();
 
   openModal(`
     <div class="modal-header"><h2>${isEdit ? 'Edit' : 'Add'} Issue</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
     <div class="modal-body">
       <div class="form-group"><label>Title</label><input id="issTitle" value="${isEdit ? escapeHtml(issue.title) : ''}"></div>
-      <div class="form-group"><label>Owner</label><select id="issOwner">${DATA.team.members.map(m => `<option value="${m.id}" ${isEdit && issue.owner === m.id ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div>
+      <div class="form-group"><label>Owner</label><select id="issOwner">${members.map(m => `<option value="${m.id}" ${isEdit && issue.owner === m.id ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div>
       <div class="form-group"><label>Priority</label><select id="issPriority"><option value="1" ${isEdit && issue.priority === 1 ? 'selected' : ''}>P1 - High</option><option value="2" ${isEdit && issue.priority === 2 ? 'selected' : ''}>P2 - Medium</option><option value="3" ${isEdit && issue.priority === 3 ? 'selected' : ''}>P3 - Low</option></select></div>
       <div class="form-group"><label>Notes</label><textarea id="issNotes">${isEdit ? escapeHtml(issue.notes || '') : ''}</textarea></div>
     </div>
@@ -677,22 +847,22 @@ function openIssueModal(listKey, idx, parentEl) {
       createdDate: isEdit ? issue.createdDate : new Date().toISOString().slice(0, 10)
     };
     if (isEdit) {
-      DATA.issues[listKey][idx] = obj;
+      team.issues[listKey][idx] = obj;
     } else {
-      DATA.issues[listKey].push(obj);
+      team.issues[listKey].push(obj);
     }
     saveData(); closeModal(); renderIssues(parentEl);
   });
 
   if (isEdit) {
     document.getElementById('deleteIssue').addEventListener('click', () => {
-      DATA.issues[listKey].splice(idx, 1);
+      team.issues[listKey].splice(idx, 1);
       saveData(); closeModal(); renderIssues(parentEl);
     });
   }
 }
 
-// ===== MODULE 5: V/TO =====
+// ===== MODULE 5: V/TO (SHARED — not per-team) =====
 let vtoTab = 'vision';
 
 function renderVTO(el) {
@@ -720,7 +890,8 @@ function renderVTOVision(el) {
       <div class="tab active" data-vto-tab="vision">Vision</div>
       <div class="tab" data-vto-tab="traction">Traction</div>
     </div>
-    <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+    <div style="display:flex;align-items:center;gap:12px;justify-content:flex-end;margin-bottom:16px">
+      <span style="color:#a3a3a3;font-size:0.82rem">Shared across all teams</span>
       <button class="btn btn-secondary btn-sm" id="printVTO">Print / Export PDF</button>
     </div>
     <div class="card">
@@ -800,14 +971,18 @@ function renderVTOTraction(el) {
       <p class="vto-field-value" data-vto-path="oneYearPlan.goals.${i}">${escapeHtml(g)}</p>
     </div>`).join('');
 
-  // Current quarter rocks summary
-  const activeRocks = DATA.rocks.filter(r => !r.archived);
-  const rocksSummary = activeRocks.map(r => {
+  // Show rocks from all teams for the traction page
+  const allRocks = [];
+  DATA.teams.forEach(t => {
+    t.rocks.filter(r => !r.archived).forEach(r => allRocks.push({ ...r, _teamName: t.name }));
+  });
+  const rocksSummary = allRocks.map(r => {
     const member = getMember(r.owner);
     const statusCls = `status-${r.status.replace(' ', '-')}`;
     return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;">
       <span class="status-badge ${statusCls}">${r.status.replace('-', ' ')}</span>
       <span>${escapeHtml(r.title)}</span>
+      <span style="color:#555;font-size:0.75rem;margin-left:4px">[${escapeHtml(r._teamName)}]</span>
       <span style="color:#666;margin-left:auto">${escapeHtml(member.name.split(' ')[0])}</span>
     </div>`;
   }).join('');
@@ -816,6 +991,9 @@ function renderVTOTraction(el) {
     <div class="tabs">
       <div class="tab" data-vto-tab="vision">Vision</div>
       <div class="tab active" data-vto-tab="traction">Traction</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;justify-content:flex-end;margin-bottom:16px">
+      <span style="color:#a3a3a3;font-size:0.82rem">Shared across all teams</span>
     </div>
     <div class="card">
       <div class="vto-section">
@@ -859,7 +1037,7 @@ function renderVTOTraction(el) {
     </div>
     <div class="card">
       <div class="vto-section">
-        <div class="vto-section-title">Current Quarter Rocks</div>
+        <div class="vto-section-title">Current Quarter Rocks (All Teams)</div>
         ${rocksSummary || '<div class="empty-state"><p>No rocks for this quarter.</p></div>'}
       </div>
     </div>`;
@@ -924,13 +1102,10 @@ function setNestedValue(obj, path, value) {
   target[last] = value;
 }
 
-// ===== MODULE 6: ACCOUNTABILITY CHART =====
+// ===== MODULE 6: ACCOUNTABILITY CHART (SHARED) =====
 function renderAccountability(el) {
   const seats = DATA.accountability || [];
   const topLevel = seats.filter(s => !s.parentId);
-  const children = seats.filter(s => s.parentId);
-
-  // Find integrator (parent of children)
   const integrator = seats.find(s => s.title === 'Integrator');
 
   const renderCard = (seat) => {
@@ -950,8 +1125,10 @@ function renderAccountability(el) {
 
   const integratorChildren = integrator ? seats.filter(s => s.parentId === integrator.id) : [];
 
+  // Use all members from all teams for seat modal
   let html = `
     <div class="toolbar">
+      <span style="color:#a3a3a3;font-size:0.82rem">Shared across all teams</span>
       <div class="toolbar-spacer"></div>
       <button class="btn btn-primary btn-sm" id="addSeatBtn">+ Seat</button>
     </div>
@@ -971,34 +1148,31 @@ function renderAccountability(el) {
   html += '</div>';
   el.innerHTML = html;
 
-  // Click to expand/collapse
   el.querySelectorAll('.org-card').forEach(card => {
     card.addEventListener('click', (e) => {
-      // If clicking on a button inside, don't toggle
       if (e.target.closest('button')) return;
       card.classList.toggle('expanded');
     });
-    // Double-click to edit
     card.addEventListener('dblclick', () => {
       const seatId = card.dataset.seatId;
       openSeatModal(seatId, el);
     });
   });
 
-  // Add seat
   document.getElementById('addSeatBtn').addEventListener('click', () => openSeatModal(null, el));
 }
 
 function openSeatModal(seatId, parentEl) {
   const seat = seatId ? DATA.accountability.find(s => s.id === seatId) : null;
   const isEdit = !!seat;
+  const allMembers = getAllMembers();
   const parentOptions = DATA.accountability.map(s => `<option value="${s.id}" ${isEdit && seat.parentId === s.id ? 'selected' : ''}>${s.title} - ${s.person}</option>`).join('');
 
   openModal(`
     <div class="modal-header"><h2>${isEdit ? 'Edit' : 'Add'} Seat</h2><button class="modal-close" onclick="document.getElementById('modal').style.display='none'">&times;</button></div>
     <div class="modal-body">
       <div class="form-group"><label>Title</label><input id="seatTitle" value="${isEdit ? escapeHtml(seat.title) : ''}"></div>
-      <div class="form-group"><label>Person</label><select id="seatPerson">${DATA.team.members.map(m => `<option value="${m.id}" ${isEdit && seat.ownerId === m.id ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div>
+      <div class="form-group"><label>Person</label><select id="seatPerson">${allMembers.map(m => `<option value="${m.id}" ${isEdit && seat.ownerId === m.id ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div>
       <div class="form-group"><label>Reports To</label><select id="seatParent"><option value="">None (Top Level)</option>${parentOptions}</select></div>
       <div class="form-group"><label>Roles & Responsibilities (one per line)</label><textarea id="seatRoles">${isEdit ? seat.roles.join('\n') : ''}</textarea></div>
     </div>
@@ -1062,6 +1236,7 @@ function renderMeeting(el) {
 }
 
 function renderMeetingRun(el) {
+  const isAll = currentTeamId === 'all';
   if (!meetingState) {
     meetingState = {
       active: false,
@@ -1084,21 +1259,13 @@ function renderMeetingRun(el) {
     const timerCls = remaining <= 0 ? 'over' : remaining < 30 ? 'warning' : '';
 
     let bodyContent = '';
-    if (sec.id === 'scorecard') {
-      bodyContent = renderMeetingScorecardReview();
-    } else if (sec.id === 'rocks') {
-      bodyContent = renderMeetingRockReview();
-    } else if (sec.id === 'todos') {
-      bodyContent = renderMeetingTodoReview();
-    } else if (sec.id === 'ids') {
-      bodyContent = renderMeetingIDS();
-    } else if (sec.id === 'segue') {
-      bodyContent = '<p style="color:#a3a3a3">Share good news — personal and professional.</p>';
-    } else if (sec.id === 'headlines') {
-      bodyContent = '<p style="color:#a3a3a3">Share customer and employee headlines. Good news and concerns.</p>';
-    } else if (sec.id === 'conclude') {
-      bodyContent = renderMeetingConclude();
-    }
+    if (sec.id === 'scorecard') bodyContent = renderMeetingScorecardReview();
+    else if (sec.id === 'rocks') bodyContent = renderMeetingRockReview();
+    else if (sec.id === 'todos') bodyContent = renderMeetingTodoReview();
+    else if (sec.id === 'ids') bodyContent = renderMeetingIDS();
+    else if (sec.id === 'segue') bodyContent = '<p style="color:#a3a3a3">Share good news — personal and professional.</p>';
+    else if (sec.id === 'headlines') bodyContent = '<p style="color:#a3a3a3">Share customer and employee headlines. Good news and concerns.</p>';
+    else if (sec.id === 'conclude') bodyContent = renderMeetingConclude();
 
     return `<div class="meeting-section ${isActive ? 'active-section' : ''}" data-section="${idx}">
       <div class="meeting-section-header">
@@ -1130,12 +1297,10 @@ function renderMeetingRun(el) {
     </div>
     <div class="meeting-agenda">${sections}</div>`;
 
-  // Tab switching
   el.querySelectorAll('[data-meeting-tab]').forEach(t => {
     t.addEventListener('click', () => { meetingTab = t.dataset.meetingTab; renderMeeting(el); });
   });
 
-  // Section headers toggle active
   el.querySelectorAll('.meeting-section-header').forEach(header => {
     header.addEventListener('click', (e) => {
       if (e.target.closest('button')) return;
@@ -1145,12 +1310,10 @@ function renderMeetingRun(el) {
     });
   });
 
-  // Start/pause/next buttons
   el.querySelectorAll('[data-start-section]').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const idx = parseInt(btn.dataset.startSection);
-      startSectionTimer(idx, el);
+      startSectionTimer(parseInt(btn.dataset.startSection), el);
     });
   });
   el.querySelectorAll('[data-pause-section]').forEach(btn => {
@@ -1162,14 +1325,12 @@ function renderMeetingRun(el) {
   el.querySelectorAll('[data-next-section]').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const nextIdx = parseInt(btn.dataset.nextSection) + 1;
       pauseSectionTimer(el);
-      meetingState.currentSection = nextIdx;
+      meetingState.currentSection = parseInt(btn.dataset.nextSection) + 1;
       renderMeetingRun(el);
     });
   });
 
-  // New meeting
   document.getElementById('newMeetingBtn').addEventListener('click', () => {
     Object.values(meetingTimers).forEach(clearInterval);
     meetingTimers = {};
@@ -1185,7 +1346,6 @@ function renderMeetingRun(el) {
     renderMeetingRun(el);
   });
 
-  // End meeting
   document.getElementById('endMeetingBtn')?.addEventListener('click', () => {
     saveMeetingToHistory();
     Object.values(meetingTimers).forEach(clearInterval);
@@ -1194,7 +1354,6 @@ function renderMeetingRun(el) {
     renderMeetingRun(el);
   });
 
-  // Rating buttons in conclude
   el.querySelectorAll('.rating-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       meetingState.rating = parseInt(btn.dataset.rating);
@@ -1202,17 +1361,15 @@ function renderMeetingRun(el) {
     });
   });
 
-  // Meeting todo checkboxes
   el.querySelectorAll('input[data-meeting-todo-id]').forEach(cb => {
     cb.addEventListener('change', () => {
-      const todo = DATA.todos.find(t => t.id === cb.dataset.meetingTodoId);
-      if (todo) { todo.completed = cb.checked; saveData(); }
+      const src = findTodoSource(cb.dataset.meetingTodoId);
+      if (src) { src.todo.completed = cb.checked; saveData(); }
     });
   });
 }
 
 function startSectionTimer(idx, el) {
-  // Stop any existing timer
   if (meetingTimers.current) clearInterval(meetingTimers.current);
   meetingState.sectionRunning = idx;
   meetingState.currentSection = idx;
@@ -1220,7 +1377,6 @@ function startSectionTimer(idx, el) {
 
   meetingTimers.current = setInterval(() => {
     meetingState.sectionTimers[idx]--;
-    // Update timer display without full re-render
     const section = el.querySelector(`[data-section="${idx}"]`);
     if (section) {
       const timerEl = section.querySelector('.meeting-timer');
@@ -1242,11 +1398,12 @@ function pauseSectionTimer(el) {
 }
 
 function renderMeetingScorecardReview() {
+  const scorecard = getScorecard();
   const weeks = getTrailingWeeks(2);
   const thisWeek = weeks[weeks.length - 1];
-  return DATA.scorecard.measurables.map(m => {
+  return scorecard.measurables.map(m => {
     const member = getMember(m.owner);
-    const val = DATA.scorecard.entries[`${m.id}_${thisWeek}`];
+    const val = scorecard.entries[`${m.id}_${thisWeek}`];
     const goalSymbol = m.goalType === 'gte' ? '>=' : m.goalType === 'lte' ? '<=' : '=';
     let status = '';
     if (val !== undefined && val !== null) {
@@ -1262,12 +1419,12 @@ function renderMeetingScorecardReview() {
       <span style="font-weight:600;color:${color}">${val !== undefined && val !== null ? val : '—'}</span>
       <span style="color:#666;font-size:0.82rem">${member.name.split(' ')[0]}</span>
     </div>`;
-  }).join('');
+  }).join('') || '<p style="color:#666">No measurables.</p>';
 }
 
 function renderMeetingRockReview() {
-  const activeRocks = DATA.rocks.filter(r => !r.archived);
-  return activeRocks.map(r => {
+  const rocks = getRocks().filter(r => !r.archived);
+  return rocks.map(r => {
     const member = getMember(r.owner);
     const statusCls = `status-${r.status.replace(' ', '-')}`;
     return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #222">
@@ -1279,8 +1436,8 @@ function renderMeetingRockReview() {
 }
 
 function renderMeetingTodoReview() {
-  const activeTodos = DATA.todos.filter(t => !t.archived && t.type === 'team');
-  return activeTodos.map(t => {
+  const todos = getTodos().filter(t => !t.archived && t.type === 'team');
+  return todos.map(t => {
     const member = getMember(t.owner);
     return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #222">
       <input type="checkbox" ${t.completed ? 'checked' : ''} data-meeting-todo-id="${t.id}" style="accent-color:#6366f1">
@@ -1292,16 +1449,16 @@ function renderMeetingTodoReview() {
 }
 
 function renderMeetingIDS() {
-  const issues = DATA.issues.shortTerm || [];
-  const html = issues.map((iss, idx) => {
+  const issues = getIssues();
+  const list = issues.shortTerm || [];
+  return list.map(iss => {
     const member = getMember(iss.owner || 'md');
     return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #222">
       <span class="issue-priority priority-${iss.priority || 3}" style="font-size:0.72rem">P${iss.priority || 3}</span>
       <span style="flex:1">${escapeHtml(iss.title)}</span>
       <span style="color:#666;font-size:0.82rem">${member.name.split(' ')[0]}</span>
     </div>`;
-  }).join('');
-  return html || '<p style="color:#666">No short-term issues.</p>';
+  }).join('') || '<p style="color:#666">No short-term issues.</p>';
 }
 
 function renderMeetingConclude() {
@@ -1319,21 +1476,27 @@ function renderMeetingConclude() {
 
 function saveMeetingToHistory() {
   if (!meetingState || !meetingState.startTime) return;
-  if (!DATA.meetings) DATA.meetings = [];
-  DATA.meetings.unshift({
-    date: meetingState.startTime,
-    rating: meetingState.rating,
-    notes: meetingState.notes || ''
-  });
+  if (currentTeamId !== 'all') {
+    const team = currentTeam();
+    if (!team.meetings) team.meetings = [];
+    team.meetings.unshift({
+      date: meetingState.startTime,
+      rating: meetingState.rating,
+      notes: meetingState.notes || ''
+    });
+  }
   saveData();
 }
 
 function renderMeetingHistory(el) {
-  const meetings = DATA.meetings || [];
+  const meetings = getMeetings();
+  const isAll = currentTeamId === 'all';
   const historyHtml = meetings.map(m => {
     const d = new Date(m.date);
+    const teamLabel = m._teamName ? `<span style="color:#555;font-size:0.8rem">[${escapeHtml(m._teamName)}]</span>` : '';
     return `<div class="meeting-history-item">
       <span class="meeting-history-date">${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+      ${teamLabel}
       <span class="meeting-history-rating">${m.rating ? m.rating + '/10' : 'Not rated'}</span>
       ${m.notes ? `<span style="color:#a3a3a3;font-size:0.85rem">${escapeHtml(m.notes)}</span>` : ''}
     </div>`;
@@ -1353,11 +1516,15 @@ function renderMeetingHistory(el) {
 
 // ===== SETTINGS =====
 function renderSettings(el) {
+  const team = currentTeam();
+  const isAll = currentTeamId === 'all';
+  const members = getActiveMembers();
+
   el.innerHTML = `
     <div class="settings-section">
       <div class="card">
         <h3>Data Management</h3>
-        <p style="color:#a3a3a3;font-size:0.85rem;margin-bottom:16px">Export your data as JSON or import from a file.</p>
+        <p style="color:#a3a3a3;font-size:0.85rem;margin-bottom:16px">Export your data as JSON or import from a file. Includes all teams.</p>
         <div class="settings-actions">
           <button class="btn btn-primary" id="exportBtn">Export JSON</button>
           <button class="btn btn-secondary" id="importBtn">Import JSON</button>
@@ -1370,9 +1537,9 @@ function renderSettings(el) {
         <button class="btn btn-danger" id="resetBtn">Reset to Default</button>
       </div>
       <div class="card">
-        <h3>Team Members</h3>
+        <h3>${isAll ? 'All Team Members' : escapeHtml(team.name) + ' Members'}</h3>
         <div id="teamMembersList">
-          ${DATA.team.members.map(m => `
+          ${members.map(m => `
             <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #222">
               <div class="avatar" style="background:${m.color}">${m.initials}</div>
               <span style="flex:1">${escapeHtml(m.name)}</span>
@@ -1382,7 +1549,6 @@ function renderSettings(el) {
       </div>
     </div>`;
 
-  // Export
   document.getElementById('exportBtn').addEventListener('click', () => {
     const blob = new Blob([JSON.stringify(DATA, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -1393,7 +1559,6 @@ function renderSettings(el) {
     URL.revokeObjectURL(url);
   });
 
-  // Import
   document.getElementById('importBtn').addEventListener('click', () => {
     document.getElementById('importFile').click();
   });
@@ -1405,6 +1570,7 @@ function renderSettings(el) {
       try {
         DATA = JSON.parse(ev.target.result);
         saveData();
+        initTeamSwitcher();
         renderSettings(el);
         alert('Data imported successfully!');
       } catch (err) {
@@ -1414,13 +1580,13 @@ function renderSettings(el) {
     reader.readAsText(file);
   });
 
-  // Reset
   document.getElementById('resetBtn').addEventListener('click', async () => {
     if (!confirm('Are you sure? This will reset ALL data to defaults.')) return;
     localStorage.removeItem(STORAGE_KEY);
     const resp = await fetch('data/seed.json');
     DATA = await resp.json();
     saveData();
+    initTeamSwitcher();
     renderSettings(el);
     alert('Data reset to defaults.');
   });
@@ -1430,6 +1596,7 @@ function renderSettings(el) {
 async function init() {
   await loadData();
   initNav();
+  initTeamSwitcher();
   switchModule('scorecard');
 }
 

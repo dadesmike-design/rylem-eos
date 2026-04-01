@@ -107,6 +107,19 @@ a { color: #6366f1; text-decoration: none; }
 .topbar-left h1 { font-size: 1.15rem; font-weight: 600; }
 .topbar-right { display: flex; align-items: center; gap: 12px; }
 .team-name { color: #a3a3a3; font-size: 0.85rem; }
+.team-switcher {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  color: #e5e5e5;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  min-width: 180px;
+}
+.team-switcher:focus { border-color: #6366f1; }
+.team-switcher option { background: #1a1a1a; color: #e5e5e5; }
 .avatar {
   width: 32px; height: 32px;
   background: #6366f1;
