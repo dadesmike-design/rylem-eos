@@ -1,0 +1,145 @@
+{
+  "team": {
+    "name": "Leadership Team",
+    "members": [
+      { "id": "md", "name": "Mike Dades", "initials": "MD", "color": "#6366f1" },
+      { "id": "jb", "name": "Jon Bobillo", "initials": "JB", "color": "#8b5cf6" },
+      { "id": "la", "name": "Lanni Aguilan", "initials": "LA", "color": "#ec4899" },
+      { "id": "lv", "name": "Liza Valencia-Vilog", "initials": "LV", "color": "#14b8a6" }
+    ]
+  },
+  "vto": {
+    "coreValues": [
+      { "title": "Character", "description": "We act with integrity and do the right thing, even when no one is watching." },
+      { "title": "Grit", "description": "We push through challenges with resilience and determination." },
+      { "title": "Results", "description": "We are driven by outcomes and hold ourselves accountable to delivering." }
+    ],
+    "coreFocus": {
+      "purpose": "Transforming Businesses and Careers",
+      "niche": "Staffing and Recruiting"
+    },
+    "tenYearTarget": {
+      "goal": "$50 Million in revenue",
+      "date": "2034-12-31"
+    },
+    "marketingStrategy": {
+      "targetMarket": "Tech, Finance, Marketing, Creative Hiring Managers, 50-5000 employees, No VMS, US (Seattle, NC, FL, TX)",
+      "threeUniques": [
+        { "title": "Retention", "description": "0% unwanted attrition" },
+        { "title": "Company Rating", "description": "Highest-rated staffing firm in WA" },
+        { "title": "Close Rate", "description": "100% on exclusives" }
+      ],
+      "provenProcess": "One-Pager",
+      "guarantee": "FTE Yes, Contract Backfill, Global Delivery Yes"
+    },
+    "threeYearPicture": {
+      "date": "2027-12-31",
+      "revenue": "$12M",
+      "profit": "$600k",
+      "measurables": "80 contractors on billing, 25% GM",
+      "goals": [
+        "Core processes documented",
+        "3-4 producing BDMs"
+      ]
+    },
+    "oneYearPlan": {
+      "date": "2026-12-31",
+      "revenue": "",
+      "profit": "",
+      "goals": []
+    },
+    "quarterlyRocks": []
+  },
+  "scorecard": {
+    "trailingWeeks": 13,
+    "measurables": [
+      { "id": "sc1", "title": "NonVMS Placement", "owner": "md", "goal": 66, "goalType": "gte", "unit": "" },
+      { "id": "sc2", "title": "VMS Placement", "owner": "md", "goal": 70, "goalType": "gte", "unit": "" },
+      { "id": "sc3", "title": "New Jobs - NonVMS", "owner": "md", "goal": 6, "goalType": "gte", "unit": "" },
+      { "id": "sc4", "title": "GDM Contractors", "owner": "md", "goal": 20, "goalType": "gte", "unit": "" }
+    ],
+    "entries": {}
+  },
+  "rocks": [
+    { "id": "r1", "title": "Backfill Liz", "owner": "jb", "status": "off-track", "dueDate": "2025-05-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
+    { "id": "r2", "title": "Dashboard Completion", "owner": "jb", "status": "complete", "dueDate": "2025-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
+    { "id": "r3", "title": "Sales Training Completion", "owner": "jb", "status": "on-track", "dueDate": "2025-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
+    { "id": "r4", "title": "Monthly recon process", "owner": "la", "status": "complete", "dueDate": "2025-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
+    { "id": "r5", "title": "Train Emily month-end", "owner": "la", "status": "on-track", "dueDate": "2025-06-30", "milestones": [], "archived": false, "quarter": "Q2 2026" },
+    { "id": "r6", "title": "HR/Acctg Training on Website", "owner": "la", "status": "complete", "dueDate": "2025-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
+    { "id": "r7", "title": "Sales Tax Process Review", "owner": "la", "status": "on-track", "dueDate": "2025-04-30", "milestones": [], "archived": false, "quarter": "Q2 2026" },
+    { "id": "r8", "title": "Get 1 Review Q1 2026", "owner": "la", "status": "on-track", "dueDate": "2025-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
+    { "id": "r9", "title": "$85 margin add", "owner": "lv", "status": "complete", "dueDate": "2025-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
+    { "id": "r10", "title": "Personality assessment for hires", "owner": "lv", "status": "complete", "dueDate": "2025-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
+    { "id": "r11", "title": "Interview 15 tech recruiters", "owner": "lv", "status": "complete", "dueDate": "2025-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
+    { "id": "r12", "title": "Recruiting Process Check Point", "owner": "lv", "status": "complete", "dueDate": "2025-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
+    { "id": "r13", "title": "$200 margin add", "owner": "lv", "status": "on-track", "dueDate": "2025-06-28", "milestones": [], "archived": false, "quarter": "Q2 2026" },
+    { "id": "r14", "title": "Monthly Recruiting Process Check Point", "owner": "lv", "status": "on-track", "dueDate": "2025-06-28", "milestones": [], "archived": false, "quarter": "Q2 2026" },
+    { "id": "r15", "title": "Hire 1 Technical Recruiter", "owner": "lv", "status": "on-track", "dueDate": "2025-06-28", "milestones": [], "archived": false, "quarter": "Q2 2026" },
+    { "id": "r16", "title": "Redesign Ideal BDM Profile", "owner": "md", "status": "on-track", "dueDate": "2025-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
+    { "id": "r17", "title": "Redesign day 1-90 BDM onboarding", "owner": "md", "status": "complete", "dueDate": "2025-03-20", "milestones": [], "archived": false, "quarter": "Q1 2026" },
+    { "id": "r18", "title": "Redesign reference check questions", "owner": "md", "status": "on-track", "dueDate": "2025-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" }
+  ],
+  "todos": [
+    { "id": "t1", "title": "Create shipping labels", "owner": "jb", "createdBy": "md", "dueDate": "2025-04-13", "completed": false, "archived": false, "type": "team" },
+    { "id": "t2", "title": "Schedule AI Dashboard discussion with Mike", "owner": "la", "createdBy": "lv", "dueDate": "2025-04-06", "completed": false, "archived": false, "type": "team" },
+    { "id": "t3", "title": "Inform Mary not to include payroll service in burden percentage", "owner": "lv", "createdBy": "la", "dueDate": "2025-04-06", "completed": false, "archived": false, "type": "team" },
+    { "id": "t4", "title": "Send training links to Lanni, Liza and Jon, send invite to go over", "owner": "lv", "createdBy": "md", "dueDate": "2025-04-06", "completed": false, "archived": false, "type": "team" },
+    { "id": "t5", "title": "Plan and communicate preemptive measures for the energy crisis", "owner": "lv", "createdBy": "jb", "dueDate": "2025-04-06", "completed": false, "archived": false, "type": "team" }
+  ],
+  "issues": {
+    "shortTerm": [],
+    "longTerm": []
+  },
+  "accountability": [
+    {
+      "id": "ac1",
+      "title": "Visionary",
+      "person": "Mike Dades",
+      "ownerId": "md",
+      "roles": ["20 Ideas", "Creativity", "Big Relationships", "Culture", "R&D", "More on Emotion"],
+      "parentId": null
+    },
+    {
+      "id": "ac2",
+      "title": "Integrator",
+      "person": "Jon Bobillo",
+      "ownerId": "jb",
+      "roles": ["LMA", "P&L", "Remove Obstacles", "Special Projects", "Core Processes", "More on Logic"],
+      "parentId": null
+    },
+    {
+      "id": "ac3",
+      "title": "Sales",
+      "person": "Mike Dades",
+      "ownerId": "md",
+      "roles": ["LMA", "Sales/Revenue Goal", "Selling", "Marketing", "Sales & Marketing Process"],
+      "parentId": "ac2"
+    },
+    {
+      "id": "ac4",
+      "title": "Operations",
+      "person": "Jon Bobillo",
+      "ownerId": "jb",
+      "roles": ["LMA", "Process Improvement", "Tools/Process Mgmt", "Special Projects", "Internal Hiring", "Employee Relations", "Reporting"],
+      "parentId": "ac2"
+    },
+    {
+      "id": "ac5",
+      "title": "HR and Finance",
+      "person": "Lanni Aguilan",
+      "ownerId": "la",
+      "roles": ["LMA", "AR/AP", "Budgeting", "Reporting", "HR/Admin", "IT", "Office Management"],
+      "parentId": "ac2"
+    },
+    {
+      "id": "ac6",
+      "title": "Recruiting",
+      "person": "Liza Valencia-Vilog",
+      "ownerId": "lv",
+      "roles": [],
+      "parentId": "ac2"
+    }
+  ],
+  "meetings": []
+}
