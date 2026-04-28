@@ -5,7 +5,7 @@
 const STORAGE_KEY = 'rylem_eos';
 const TEAM_KEY = 'rylem_eos_team';
 let DATA = null;
-let currentModule = 'scorecard';
+let currentModule = 'my90';
 let currentTeamId = localStorage.getItem(TEAM_KEY) || 'leadership';
 let meetingState = null;
 
@@ -249,7 +249,7 @@ function switchModule(mod) {
   currentModule = mod;
   document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.module === mod));
   const titles = {
-    scorecard: 'Scorecard', rocks: 'Rocks', todos: 'To-Dos',
+    my90: 'My 90', scorecard: 'Scorecard', rocks: 'Rocks', todos: 'To-Dos',
     issues: 'Issues', vto: 'V/TO', accountability: 'Accountability Chart',
     meeting: 'L10 Meeting', settings: 'Settings'
   };
@@ -260,6 +260,7 @@ function switchModule(mod) {
 function renderModule() {
   const el = document.getElementById('content');
   const renderers = {
+    my90: renderMy90,
     scorecard: renderScorecard,
     rocks: renderRocks,
     todos: renderTodos,
@@ -280,6 +281,148 @@ function openModal(html) {
 
 function closeModal() {
   document.getElementById('modal').style.display = 'none';
+}
+
+
+// ===== MODULE 0: MY 90 DASHBOARD =====
+function getCurrentWeekKey() {
+  const weeks = getTrailingWeeks(1);
+  return weeks[0];
+}
+
+function scorecardStats(scorecard) {
+  const week = getCurrentWeekKey();
+  let total = 0, done = 0, missing = 0, offTrack = 0;
+  (scorecard.measurables || []).forEach(m => {
+    total++;
+    const val = scorecard.entries?.[`${m.id}_${week}`];
+    if (val === undefined || val === null || val === '') { missing++; return; }
+    const n = parseFloat(val);
+    if (isNaN(n)) { missing++; return; }
+    let ok = false;
+    if (m.goalType === 'gte') ok = n >= m.goal;
+    else if (m.goalType === 'lte') ok = n <= m.goal;
+    else ok = n === m.goal;
+    if (ok) done++; else offTrack++;
+  });
+  return { total, done, missing, offTrack };
+}
+
+function renderMy90(el) {
+  const isAll = currentTeamId === 'all';
+  const teamName = isAll ? 'All' : currentTeam()?.name || 'Team';
+  const teamTodos = getTodos().filter(t => !t.archived && !t.completed && t.type === 'team')
+    .sort((a,b)=>(a.dueDate||'').localeCompare(b.dueDate||''));
+  const privateTodos = getTodos().filter(t => !t.archived && !t.completed && t.type === 'personal')
+    .sort((a,b)=>(a.dueDate||'').localeCompare(b.dueDate||''));
+  const rocks = getRocks().filter(r => !r.archived)
+    .sort((a,b)=>(a.dueDate||'').localeCompare(b.dueDate||''));
+  const scorecard = getScorecard();
+  const stats = scorecardStats(scorecard);
+  const currentWeek = getCurrentWeekKey();
+  const currentWeekLabel = new Date(currentWeek + 'T00:00:00').toLocaleDateString('en-US', { month:'short', day:'numeric' });
+
+  const todoRow = t => {
+    const member = getMember(t.owner);
+    const teamLabel = t._teamName ? `<span class="my90-team-tag">${escapeHtml(t._teamName)}</span>` : '';
+    return `<div class="my90-row" data-my90-todo="${t.id}">
+      <input type="checkbox" ${isAll ? 'disabled' : ''} data-my90-todo-check="${t.id}">
+      <div class="my90-row-main"><span>${escapeHtml(t.title)}</span>${teamLabel}</div>
+      <div class="my90-muted">${escapeHtml(member.name.split(' ')[0])}</div>
+      <div class="my90-date">${formatDate(t.dueDate) || 'No date'}</div>
+    </div>`;
+  };
+
+  const rockRow = r => {
+    const member = getMember(r.owner);
+    const statusCls = `status-${(r.status || 'on-track').replace(' ', '-')}`;
+    const teamLabel = r._teamName ? `<span class="my90-team-tag">${escapeHtml(r._teamName)}</span>` : '';
+    return `<div class="my90-row" data-my90-rock="${r.id}">
+      <span class="status-badge ${statusCls}">${(r.status || 'on-track').replace('-', ' ')}</span>
+      <div class="my90-row-main"><span>${escapeHtml(r.title)}</span>${teamLabel}</div>
+      <div class="my90-muted">${escapeHtml(member.name.split(' ')[0])}</div>
+      <div class="my90-date">${formatDate(r.dueDate)}</div>
+    </div>`;
+  };
+
+  const scoreRows = (scorecard.measurables || []).map(m => {
+    const val = scorecard.entries?.[`${m.id}_${currentWeek}`];
+    const member = getMember(m.owner);
+    const goalSymbol = m.goalType === 'gte' ? '>=' : m.goalType === 'lte' ? '<=' : '=';
+    let cls = 'missing', status = 'missing';
+    if (val !== undefined && val !== null && val !== '') {
+      const n = parseFloat(val);
+      let ok = false;
+      if (!isNaN(n)) {
+        if (m.goalType === 'gte') ok = n >= m.goal;
+        else if (m.goalType === 'lte') ok = n <= m.goal;
+        else ok = n === m.goal;
+        cls = ok ? 'green' : 'red'; status = ok ? 'on track' : 'off track';
+      }
+    }
+    const teamLabel = m._teamName ? `<span class="my90-team-tag">${escapeHtml(m._teamName)}</span>` : '';
+    return `<div class="my90-row">
+      <div class="my90-row-main"><span>${escapeHtml(m.title)}</span>${teamLabel}</div>
+      <div class="my90-muted">${escapeHtml(member.name.split(' ')[0])}</div>
+      <div class="my90-goal">${goalSymbol} ${m.goal}</div>
+      <div class="my90-score ${cls}">${val !== undefined && val !== null && val !== '' ? val : '—'}</div>
+      <div class="my90-muted">${status}</div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div class="my90-hero">
+      <div>
+        <h2>My 90</h2>
+        <p>A personalized workspace to view tasks, data, goals, and more.</p>
+      </div>
+      <div class="my90-actions">
+        <button class="btn btn-primary" id="my90CreateBtn">Create</button>
+        <span class="my90-team-pill">Team: ${escapeHtml(teamName)}</span>
+      </div>
+    </div>
+    <div class="my90-grid">
+      <section class="card my90-card">
+        <div class="my90-card-header"><div><h3>Team To-Dos</h3><span>${teamTodos.length}</span></div><button class="btn btn-secondary btn-sm" data-jump="todos">Open</button></div>
+        <div class="my90-list">${teamTodos.slice(0,6).map(todoRow).join('') || '<div class="my90-empty">You have no Team To-Dos right now.</div>'}</div>
+      </section>
+      <section class="card my90-card">
+        <div class="my90-card-header"><div><h3>Private To-Dos</h3><span>${privateTodos.length}</span></div><button class="btn btn-secondary btn-sm" data-jump="todos-private">Open</button></div>
+        <div class="my90-list">${privateTodos.slice(0,6).map(todoRow).join('') || '<div class="my90-empty">You have no Private To-Dos right now.</div>'}</div>
+      </section>
+      <section class="card my90-card wide">
+        <div class="my90-card-header"><div><h3>Rocks & Milestones</h3><span>${rocks.length}</span></div><button class="btn btn-secondary btn-sm" data-jump="rocks">Open</button></div>
+        <div class="my90-list">${rocks.slice(0,8).map(rockRow).join('') || '<div class="my90-empty">No active rocks.</div>'}</div>
+      </section>
+      <section class="card my90-card wide">
+        <div class="my90-card-header"><div><h3>Scorecard</h3><span>${currentWeekLabel}</span></div><button class="btn btn-secondary btn-sm" data-jump="scorecard">Open</button></div>
+        <div class="my90-stats">
+          <div><strong>${stats.total}</strong><span>Measurables</span></div>
+          <div><strong class="green">${stats.done}</strong><span>On track</span></div>
+          <div><strong class="red">${stats.offTrack}</strong><span>Off track</span></div>
+          <div><strong>${stats.missing}</strong><span>Missing</span></div>
+        </div>
+        <div class="my90-list score-list">${scoreRows || '<div class="my90-empty">No measurables.</div>'}</div>
+      </section>
+    </div>`;
+
+  el.querySelectorAll('[data-jump]').forEach(btn => btn.addEventListener('click', () => {
+    const target = btn.dataset.jump;
+    if (target === 'todos-private') { todosTab = 'personal'; switchModule('todos'); }
+    else switchModule(target);
+  }));
+  el.querySelector('#my90CreateBtn')?.addEventListener('click', () => {
+    if (currentTeamId === 'all') { switchModule('todos'); return; }
+    todosTab = 'team';
+    switchModule('todos');
+    setTimeout(() => document.getElementById('addTodoBtn')?.click(), 0);
+  });
+  if (!isAll) {
+    el.querySelectorAll('[data-my90-todo-check]').forEach(cb => cb.addEventListener('change', () => {
+      const src = findTodoSource(cb.dataset.my90TodoCheck);
+      if (src) { src.todo.completed = cb.checked; saveData(); renderMy90(el); }
+    }));
+  }
 }
 
 // ===== MODULE 1: SCORECARD =====
@@ -1597,7 +1740,7 @@ async function init() {
   await loadData();
   initNav();
   initTeamSwitcher();
-  switchModule('scorecard');
+  switchModule('my90');
 }
 
 init();

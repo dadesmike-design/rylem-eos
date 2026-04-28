@@ -669,3 +669,37 @@ a { color: #6366f1; text-decoration: none; }
   body { background: #fff; color: #000; }
   .card { border: 1px solid #ccc; background: #fff; }
 }
+
+
+/* ===== MY 90 DASHBOARD ===== */
+.my90-hero {
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  margin-bottom:20px; padding:20px 22px; border:1px solid #2a2a2a; border-radius:12px;
+  background: linear-gradient(135deg, #171724 0%, #111 60%);
+}
+.my90-hero h2 { font-size:1.55rem; margin-bottom:6px; }
+.my90-hero p { color:#a3a3a3; }
+.my90-actions { display:flex; align-items:center; gap:10px; }
+.my90-team-pill { background:#1a1a1a; border:1px solid #2a2a2a; border-radius:999px; padding:7px 12px; color:#cfcfcf; font-size:.85rem; }
+.my90-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:16px; }
+.my90-card { margin-bottom:0; min-height:230px; }
+.my90-card.wide { grid-column: span 2; }
+.my90-card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.my90-card-header h3 { font-size:1rem; margin-bottom:3px; }
+.my90-card-header span { color:#a3a3a3; font-size:.82rem; }
+.my90-list { display:flex; flex-direction:column; gap:6px; }
+.my90-row { display:grid; grid-template-columns: auto minmax(0,1fr) auto auto auto; gap:10px; align-items:center; padding:9px 10px; background:#141414; border:1px solid #252525; border-radius:8px; }
+.my90-row-main { min-width:0; display:flex; align-items:center; gap:8px; }
+.my90-row-main span:first-child { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.my90-muted, .my90-date, .my90-goal { color:#8a8a8a; font-size:.8rem; white-space:nowrap; }
+.my90-team-tag { color:#666; font-size:.72rem; border:1px solid #333; border-radius:999px; padding:1px 6px; white-space:nowrap; }
+.my90-empty { color:#777; padding:28px 10px; text-align:center; border:1px dashed #303030; border-radius:8px; }
+.my90-stats { display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; margin-bottom:12px; }
+.my90-stats div { background:#141414; border:1px solid #252525; border-radius:8px; padding:12px; }
+.my90-stats strong { display:block; font-size:1.3rem; margin-bottom:3px; }
+.my90-stats span { color:#8a8a8a; font-size:.76rem; }
+.my90-score { font-weight:700; min-width:36px; text-align:center; padding:3px 7px; border-radius:6px; background:#222; }
+.my90-score.green, .my90-stats .green { color:#22c55e; }
+.my90-score.red, .my90-stats .red { color:#ef4444; }
+.my90-score.missing { color:#a3a3a3; }
+@media (max-width: 900px) { .my90-grid { grid-template-columns: 1fr; } .my90-card.wide { grid-column: span 1; } .my90-hero { flex-direction:column; align-items:flex-start; } }
