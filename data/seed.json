@@ -4,199 +4,1508 @@
       "id": "leadership",
       "name": "Leadership Team",
       "members": [
-        { "id": "md", "name": "Mike Dades", "initials": "MD", "color": "#6366f1" },
-        { "id": "jb", "name": "Jon Bobillo", "initials": "JB", "color": "#8b5cf6" },
-        { "id": "la", "name": "Lanni Aguilan", "initials": "LA", "color": "#ec4899" },
-        { "id": "lv", "name": "Liza Valencia-Vilog", "initials": "LV", "color": "#14b8a6" }
+        {
+          "id": "md",
+          "name": "Mike Dades",
+          "initials": "MD",
+          "color": "#6366f1"
+        },
+        {
+          "id": "jb",
+          "name": "Jon Bobillo",
+          "initials": "JB",
+          "color": "#8b5cf6"
+        },
+        {
+          "id": "la",
+          "name": "Lanni Aguilan",
+          "initials": "LA",
+          "color": "#ec4899"
+        },
+        {
+          "id": "lv",
+          "name": "Liza Valencia-Vilog",
+          "initials": "LV",
+          "color": "#14b8a6"
+        }
       ],
       "scorecard": {
         "trailingWeeks": 13,
         "measurables": [
-          { "id": "sc1", "title": "NonVMS Placement", "owner": "md", "goal": 66, "goalType": "gte", "unit": "" },
-          { "id": "sc2", "title": "VMS Placement", "owner": "md", "goal": 70, "goalType": "gte", "unit": "" },
-          { "id": "sc3", "title": "New Jobs - NonVMS", "owner": "md", "goal": 6, "goalType": "gte", "unit": "" },
-          { "id": "sc4", "title": "GDM Contractors", "owner": "md", "goal": 20, "goalType": "gte", "unit": "" }
+          {
+            "id": "sc1",
+            "title": "NonVMS Placement",
+            "owner": "md",
+            "goal": 66,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "sc2",
+            "title": "VMS Placement",
+            "owner": "md",
+            "goal": 70,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "sc3",
+            "title": "New Jobs - NonVMS",
+            "owner": "md",
+            "goal": 6,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "sc4",
+            "title": "GDM Contractors",
+            "owner": "md",
+            "goal": 20,
+            "goalType": "gte",
+            "unit": ""
+          }
         ],
         "entries": {}
       },
       "rocks": [
-        { "id": "r16", "title": "Redesign Ideal BDM Profile", "owner": "md", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "r17", "title": "Redesign day 1-90 BDM onboarding", "owner": "md", "status": "complete", "dueDate": "2026-03-20", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "r18", "title": "Redesign reference check questions (no red flags allowed)", "owner": "md", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "r1", "title": "Backfill Liz", "owner": "jb", "status": "off-track", "dueDate": "2026-05-31", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "r2", "title": "Dashboard Completion", "owner": "jb", "status": "complete", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "r3", "title": "Sales Training Completion", "owner": "jb", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "r4", "title": "Create Monthly recon process of Benefit Enrollments/Payroll/Invoices", "owner": "la", "status": "complete", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "r5", "title": "Train Emily on Month-end Process", "owner": "la", "status": "on-track", "dueDate": "2026-06-30", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "r6", "title": "Complete HR/Acctg Training Output on Wix Website", "owner": "la", "status": "complete", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "r7", "title": "Complete Sales Tax Process Review and Issue Resolution", "owner": "la", "status": "on-track", "dueDate": "2026-04-30", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "r8", "title": "Getting 1 Review from Client/Contractor for 1Q 2026", "owner": "la", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "r9", "title": "$85 margin add", "owner": "lv", "status": "complete", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "r10", "title": "Explore appropriate personality assessment for internal hires", "owner": "lv", "status": "complete", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "r11", "title": "Interview at least 15 technical recruiters", "owner": "lv", "status": "complete", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "r12", "title": "Recruiting Process Check Point monthly", "owner": "lv", "status": "complete", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "r13", "title": "$200 margin add", "owner": "lv", "status": "on-track", "dueDate": "2026-06-28", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "r14", "title": "Monthly Recruiting Process Check Point", "owner": "lv", "status": "on-track", "dueDate": "2026-06-28", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "r15", "title": "Hire 1 Technical Recruiter", "owner": "lv", "status": "on-track", "dueDate": "2026-06-28", "milestones": [], "archived": false, "quarter": "Q2 2026" }
+        {
+          "id": "lead-jon-bobillo-1",
+          "title": "Backfill Liz",
+          "owner": "jb",
+          "status": "on-track",
+          "dueDate": "2026-05-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-jon-bobillo-2",
+          "title": "Dashboard Completion",
+          "owner": "jb",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-jon-bobillo-3",
+          "title": "Sales Training Completion",
+          "owner": "jb",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-lanni-aguilan-1",
+          "title": "Create a Monthly recon process of Benefit Enrollments, Payroll Reports, and Invoices.",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-lanni-aguilan-2",
+          "title": "Train Emily on the Month-end Process due on 2Q 2026",
+          "owner": "la",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-lanni-aguilan-3",
+          "title": "Complete the HR/Acctg Training Output on the Wix Website",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-lanni-aguilan-4",
+          "title": "Complete the Sales Tax Process Review and Issue Resolution",
+          "owner": "la",
+          "status": "on-track",
+          "dueDate": "2026-04-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-lanni-aguilan-5",
+          "title": "Getting 1 Review from a Client/Contractor for 1Q 2026",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-lanni-aguilan-6",
+          "title": "Getting 1 Review from a Client/Contractor for 2Q 2026",
+          "owner": "la",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-lanni-aguilan-7",
+          "title": "Implement the New AR Aging Process: Aging based on Invoice Due Date (short-term Rock)",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-04-24",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-liza-valencia-vilog-1",
+          "title": "$200 margin add",
+          "owner": "lv",
+          "status": "off-track",
+          "dueDate": "2026-06-28",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-liza-valencia-vilog-2",
+          "title": "Monthly Recruiting Process Check Point",
+          "owner": "lv",
+          "status": "on-track",
+          "dueDate": "2026-06-28",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-liza-valencia-vilog-3",
+          "title": "Hire 1 Technical Recruiter",
+          "owner": "lv",
+          "status": "on-track",
+          "dueDate": "2026-06-28",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-mike-dades-1",
+          "title": "Redesign Ideal BDM Profile",
+          "owner": "md",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-mike-dades-2",
+          "title": "Redesign day 1-90 BDM onboardingh",
+          "owner": "md",
+          "status": "complete",
+          "dueDate": "2026-03-20",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "lead-mike-dades-3",
+          "title": "Redesign reference check questions (no red flags allowed)",
+          "owner": "md",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        }
       ],
       "todos": [
-        { "id": "t1", "title": "Mike - create shipping labels", "owner": "jb", "createdBy": "md", "dueDate": "2026-04-13", "completed": false, "archived": false, "type": "team" },
-        { "id": "t2", "title": "Liza/Lanni - Schedule AI Dashboard discussion with Mike", "owner": "la", "createdBy": "lv", "dueDate": "2026-04-06", "completed": false, "archived": false, "type": "team" },
-        { "id": "t3", "title": "Lanni - inform Mary not to include payroll service in the burden percentage", "owner": "lv", "createdBy": "la", "dueDate": "2026-04-06", "completed": false, "archived": false, "type": "team" },
-        { "id": "t4", "title": "Mike - send training links to Lanni, Liza and Jon, send invite to go over", "owner": "lv", "createdBy": "md", "dueDate": "2026-04-06", "completed": false, "archived": false, "type": "team" },
-        { "id": "t5", "title": "Jon and Lanni to plan and communicate preemptive measures for the energy crisis", "owner": "lv", "createdBy": "jb", "dueDate": "2026-04-06", "completed": false, "archived": false, "type": "team" }
+        {
+          "id": "t1",
+          "title": "Mike - create shipping labels",
+          "owner": "jb",
+          "createdBy": "md",
+          "dueDate": "2026-04-13",
+          "completed": false,
+          "archived": false,
+          "type": "team"
+        },
+        {
+          "id": "t2",
+          "title": "Liza/Lanni - Schedule AI Dashboard discussion with Mike",
+          "owner": "la",
+          "createdBy": "lv",
+          "dueDate": "2026-04-06",
+          "completed": false,
+          "archived": false,
+          "type": "team"
+        },
+        {
+          "id": "t3",
+          "title": "Lanni - inform Mary not to include payroll service in the burden percentage",
+          "owner": "lv",
+          "createdBy": "la",
+          "dueDate": "2026-04-06",
+          "completed": false,
+          "archived": false,
+          "type": "team"
+        },
+        {
+          "id": "t4",
+          "title": "Mike - send training links to Lanni, Liza and Jon, send invite to go over",
+          "owner": "lv",
+          "createdBy": "md",
+          "dueDate": "2026-04-06",
+          "completed": false,
+          "archived": false,
+          "type": "team"
+        },
+        {
+          "id": "t5",
+          "title": "Jon and Lanni to plan and communicate preemptive measures for the energy crisis",
+          "owner": "lv",
+          "createdBy": "jb",
+          "dueDate": "2026-04-06",
+          "completed": false,
+          "archived": false,
+          "type": "team"
+        }
       ],
-      "issues": { "shortTerm": [], "longTerm": [] },
+      "issues": {
+        "shortTerm": [],
+        "longTerm": []
+      },
       "meetings": []
     },
     {
       "id": "sales",
       "name": "Sales",
       "members": [
-        { "id": "md", "name": "Mike Dades", "initials": "MD", "color": "#6366f1" },
-        { "id": "julia", "name": "Julia", "initials": "JU", "color": "#f59e0b" },
-        { "id": "april", "name": "April", "initials": "AP", "color": "#10b981" }
+        {
+          "id": "md",
+          "name": "Mike Dades",
+          "initials": "MD",
+          "color": "#6366f1"
+        },
+        {
+          "id": "julia",
+          "name": "Julia",
+          "initials": "JU",
+          "color": "#f59e0b"
+        },
+        {
+          "id": "april",
+          "name": "April",
+          "initials": "AP",
+          "color": "#10b981"
+        },
+        {
+          "id": "shared-rocks",
+          "name": "Shared Rocks",
+          "initials": "SR",
+          "color": "#14b8a6"
+        }
       ],
-      "scorecard": { "trailingWeeks": 13, "measurables": [], "entries": {} },
-      "rocks": [],
+      "scorecard": {
+        "trailingWeeks": 13,
+        "measurables": [
+          {
+            "id": "sales-sc1",
+            "title": "Daily calls",
+            "owner": "md",
+            "goal": 60,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "sales-sc2",
+            "title": "New contacts added",
+            "owner": "md",
+            "goal": 40,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "sales-sc3",
+            "title": "Meetings set",
+            "owner": "md",
+            "goal": 1,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "sales-sc4",
+            "title": "Jobs brought in",
+            "owner": "md",
+            "goal": 1,
+            "goalType": "gte",
+            "unit": ""
+          }
+        ],
+        "entries": {}
+      },
+      "rocks": [
+        {
+          "id": "sales-shared-1",
+          "title": "Add in 40 new contacts in the prospecting process per day = 920 contacts in April",
+          "owner": "shared-rocks",
+          "status": "on-track",
+          "dueDate": "2025-04-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2025"
+        },
+        {
+          "id": "sales-shared-2",
+          "title": "60 calls per day",
+          "owner": "shared-rocks",
+          "status": "on-track",
+          "dueDate": "2025-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2025"
+        },
+        {
+          "id": "sales-shared-3",
+          "title": "Shadow and attend one meeting per week with each BDM",
+          "owner": "shared-rocks",
+          "status": "on-track",
+          "dueDate": "2025-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2025"
+        },
+        {
+          "id": "sales-shared-4",
+          "title": "1 job brought in within the month of April",
+          "owner": "shared-rocks",
+          "status": "on-track",
+          "dueDate": "2025-04-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2025"
+        },
+        {
+          "id": "sales-shared-5",
+          "title": "Add in 40 new contacts in the prospecting process per day = 920 contacts in April",
+          "owner": "shared-rocks",
+          "status": "on-track",
+          "dueDate": "2025-04-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2025"
+        }
+      ],
       "todos": [],
-      "issues": { "shortTerm": [], "longTerm": [] },
+      "issues": {
+        "shortTerm": [],
+        "longTerm": []
+      },
       "meetings": []
     },
     {
       "id": "sales-nonvms",
       "name": "Sales and NonVMS",
       "members": [
-        { "id": "md", "name": "Mike Dades", "initials": "MD", "color": "#6366f1" },
-        { "id": "julia", "name": "Julia", "initials": "JU", "color": "#f59e0b" },
-        { "id": "sheila", "name": "Sheila", "initials": "SH", "color": "#f43f5e" },
-        { "id": "tet", "name": "Tet", "initials": "TT", "color": "#a855f7" }
+        {
+          "id": "md",
+          "name": "Mike Dades",
+          "initials": "MD",
+          "color": "#6366f1"
+        },
+        {
+          "id": "julia",
+          "name": "Julia",
+          "initials": "JU",
+          "color": "#f59e0b"
+        },
+        {
+          "id": "sheila",
+          "name": "Sheila",
+          "initials": "SH",
+          "color": "#f43f5e"
+        },
+        {
+          "id": "tet",
+          "name": "Tet",
+          "initials": "TT",
+          "color": "#a855f7"
+        },
+        {
+          "id": "april-melton",
+          "name": "April Melton",
+          "initials": "AM",
+          "color": "#f59e0b"
+        },
+        {
+          "id": "julia-dusseau",
+          "name": "Julia Dusseau",
+          "initials": "JD",
+          "color": "#10b981"
+        },
+        {
+          "id": "sheila-alarte",
+          "name": "Sheila Alarte",
+          "initials": "SA",
+          "color": "#f43f5e"
+        },
+        {
+          "id": "shared-rocks",
+          "name": "Shared Rocks",
+          "initials": "SR",
+          "color": "#a855f7"
+        }
       ],
-      "scorecard": { "trailingWeeks": 13, "measurables": [], "entries": {} },
-      "rocks": [],
+      "scorecard": {
+        "trailingWeeks": 13,
+        "measurables": [
+          {
+            "id": "sales-nonvms-sc1",
+            "title": "Meetings",
+            "owner": "md",
+            "goal": 35,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "sales-nonvms-sc2",
+            "title": "Reqs",
+            "owner": "md",
+            "goal": 10,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "sales-nonvms-sc3",
+            "title": "Placements",
+            "owner": "md",
+            "goal": 2,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "sales-nonvms-sc4",
+            "title": "Margin add",
+            "owner": "md",
+            "goal": 50,
+            "goalType": "gte",
+            "unit": ""
+          }
+        ],
+        "entries": {}
+      },
+      "rocks": [
+        {
+          "id": "sn-april-melton-1",
+          "title": "100 Qualified Companies in Ceipal",
+          "owner": "april-melton",
+          "status": "on-track",
+          "dueDate": "2026-07-05",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "sn-april-melton-2",
+          "title": "35+ meetings",
+          "owner": "april-melton",
+          "status": "on-track",
+          "dueDate": "2026-07-05",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "sn-april-melton-3",
+          "title": "10-15 reqs",
+          "owner": "april-melton",
+          "status": "on-track",
+          "dueDate": "2026-07-05",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "sn-april-melton-4",
+          "title": "2-4 placements",
+          "owner": "april-melton",
+          "status": "on-track",
+          "dueDate": "2026-07-05",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "sn-julia-dusseau-1",
+          "title": "3 placements per month/9 per quarter",
+          "owner": "julia-dusseau",
+          "status": "off-track",
+          "dueDate": "2026-04-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "sn-julia-dusseau-2",
+          "title": "31,000 in full time placements per quarter",
+          "owner": "julia-dusseau",
+          "status": "off-track",
+          "dueDate": "2026-04-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "sn-julia-dusseau-3",
+          "title": "Master GDM selling and report to Mike",
+          "owner": "julia-dusseau",
+          "status": "on-track",
+          "dueDate": "2026-04-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "sn-sheila-alarte-1",
+          "title": "Tet- $8 split margin add per month",
+          "owner": "sheila-alarte",
+          "status": "off-track",
+          "dueDate": "2026-07-05",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "sn-sheila-alarte-2",
+          "title": "Sheila- $8 split margin add per month",
+          "owner": "sheila-alarte",
+          "status": "off-track",
+          "dueDate": "2026-07-05",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "sn-sheila-alarte-3",
+          "title": "Honey- 32 meetings/ month",
+          "owner": "sheila-alarte",
+          "status": "on-track",
+          "dueDate": "2026-07-13",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "sn-shared-rocks-1",
+          "title": "$50 margin add",
+          "owner": "shared-rocks",
+          "status": "on-track",
+          "dueDate": "2026-05-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "sn-shared-rocks-2",
+          "title": "Hire 1 recruiter for the Non-VMS team",
+          "owner": "shared-rocks",
+          "status": "on-track",
+          "dueDate": "2026-05-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        }
+      ],
       "todos": [],
-      "issues": { "shortTerm": [], "longTerm": [] },
+      "issues": {
+        "shortTerm": [],
+        "longTerm": []
+      },
       "meetings": []
     },
     {
       "id": "vms",
       "name": "VMS",
       "members": [
-        { "id": "chino", "name": "Chino", "initials": "CH", "color": "#0ea5e9" },
-        { "id": "zac", "name": "Zac", "initials": "ZC", "color": "#22d3ee" },
-        { "id": "dave", "name": "Dave", "initials": "DV", "color": "#84cc16" },
-        { "id": "rey", "name": "Rey", "initials": "RY", "color": "#f97316" }
+        {
+          "id": "chino",
+          "name": "Chino",
+          "initials": "CH",
+          "color": "#0ea5e9"
+        },
+        {
+          "id": "zac",
+          "name": "Zac",
+          "initials": "ZC",
+          "color": "#22d3ee"
+        },
+        {
+          "id": "dave",
+          "name": "Dave",
+          "initials": "DV",
+          "color": "#84cc16"
+        },
+        {
+          "id": "rey",
+          "name": "Rey",
+          "initials": "RY",
+          "color": "#f97316"
+        },
+        {
+          "id": "shielanie-desagon",
+          "name": "Shielanie Desagon",
+          "initials": "SD",
+          "color": "#f59e0b"
+        }
       ],
-      "scorecard": { "trailingWeeks": 13, "measurables": [], "entries": {} },
-      "rocks": [],
+      "scorecard": {
+        "trailingWeeks": 13,
+        "measurables": [
+          {
+            "id": "vms-sc1",
+            "title": "Placements",
+            "owner": "chino",
+            "goal": 1,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "vms-sc2",
+            "title": "Margin add",
+            "owner": "chino",
+            "goal": 7,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "vms-sc3",
+            "title": "Submittals",
+            "owner": "chino",
+            "goal": 10,
+            "goalType": "gte",
+            "unit": ""
+          }
+        ],
+        "entries": {}
+      },
+      "rocks": [
+        {
+          "id": "vms-sheila-1",
+          "title": "Rey- $7 margin add per month",
+          "owner": "shielanie-desagon",
+          "status": "on-track",
+          "dueDate": "2026-07-14",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "vms-sheila-2",
+          "title": "Dave- $3.5 margin add per month",
+          "owner": "shielanie-desagon",
+          "status": "off-track",
+          "dueDate": "2026-07-14",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "vms-sheila-3",
+          "title": "Isaac- $3.5 margin add per month",
+          "owner": "shielanie-desagon",
+          "status": "off-track",
+          "dueDate": "2026-07-14",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "vms-sheila-4",
+          "title": "Chino- $3.5 margin add per month",
+          "owner": "shielanie-desagon",
+          "status": "on-track",
+          "dueDate": "2026-07-14",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "vms-sheila-5",
+          "title": "Chino- 1 placement for April",
+          "owner": "shielanie-desagon",
+          "status": "on-track",
+          "dueDate": "2026-07-14",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "vms-sheila-6",
+          "title": "Lea- 1 placement per month",
+          "owner": "shielanie-desagon",
+          "status": "off-track",
+          "dueDate": "2026-07-14",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        }
+      ],
       "todos": [],
-      "issues": { "shortTerm": [], "longTerm": [] },
+      "issues": {
+        "shortTerm": [],
+        "longTerm": []
+      },
       "meetings": []
     },
     {
       "id": "appointment-setters",
       "name": "Appointment Setters",
       "members": [
-        { "id": "md", "name": "Mike Dades", "initials": "MD", "color": "#6366f1" },
-        { "id": "jb", "name": "Jon Bobillo", "initials": "JB", "color": "#8b5cf6" },
-        { "id": "honey", "name": "Honey", "initials": "HN", "color": "#fbbf24" }
+        {
+          "id": "md",
+          "name": "Mike Dades",
+          "initials": "MD",
+          "color": "#6366f1"
+        },
+        {
+          "id": "jb",
+          "name": "Jon Bobillo",
+          "initials": "JB",
+          "color": "#8b5cf6"
+        },
+        {
+          "id": "honey",
+          "name": "Honey",
+          "initials": "HN",
+          "color": "#fbbf24"
+        },
+        {
+          "id": "shared-rocks",
+          "name": "Shared Rocks",
+          "initials": "SR",
+          "color": "#14b8a6"
+        }
       ],
-      "scorecard": { "trailingWeeks": 13, "measurables": [], "entries": {} },
+      "scorecard": {
+        "trailingWeeks": 13,
+        "measurables": [
+          {
+            "id": "appointment-setters-sc1",
+            "title": "Meetings set",
+            "owner": "md",
+            "goal": 72,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "appointment-setters-sc2",
+            "title": "Calls per day",
+            "owner": "md",
+            "goal": 60,
+            "goalType": "gte",
+            "unit": ""
+          }
+        ],
+        "entries": {}
+      },
       "rocks": [
-        { "id": "as-r1", "title": "Set 72 meetings within 90 days", "owner": "honey", "status": "on-track", "dueDate": "2025-07-31", "milestones": [], "archived": false, "quarter": "Q3 2025" }
+        {
+          "id": "as-shared-1",
+          "title": "Set 72 meetings within 90 days",
+          "owner": "shared-rocks",
+          "status": "on-track",
+          "dueDate": "2025-07-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q3 2025"
+        }
       ],
       "todos": [],
-      "issues": { "shortTerm": [], "longTerm": [] },
+      "issues": {
+        "shortTerm": [],
+        "longTerm": []
+      },
       "meetings": []
     },
     {
       "id": "back-office",
       "name": "Back Office",
       "members": [
-        { "id": "la", "name": "Lanni Aguilan", "initials": "LA", "color": "#ec4899" },
-        { "id": "aya", "name": "Aya Delos Santos", "initials": "AY", "color": "#fb923c" },
-        { "id": "jb", "name": "Jon Bobillo", "initials": "JB", "color": "#8b5cf6" },
-        { "id": "emily", "name": "Emily", "initials": "EM", "color": "#34d399" },
-        { "id": "mary", "name": "Mary", "initials": "MR", "color": "#c084fc" },
-        { "id": "lisa", "name": "Lisa", "initials": "LS", "color": "#f472b6" },
-        { "id": "rose", "name": "Rose", "initials": "RS", "color": "#fda4af" }
+        {
+          "id": "la",
+          "name": "Lanni Aguilan",
+          "initials": "LA",
+          "color": "#ec4899"
+        },
+        {
+          "id": "aya",
+          "name": "Aya Delos Santos",
+          "initials": "AY",
+          "color": "#fb923c"
+        },
+        {
+          "id": "jb",
+          "name": "Jon Bobillo",
+          "initials": "JB",
+          "color": "#8b5cf6"
+        },
+        {
+          "id": "emily",
+          "name": "Emily",
+          "initials": "EM",
+          "color": "#34d399"
+        },
+        {
+          "id": "mary",
+          "name": "Mary",
+          "initials": "MR",
+          "color": "#c084fc"
+        },
+        {
+          "id": "lisa",
+          "name": "Lisa",
+          "initials": "LS",
+          "color": "#f472b6"
+        },
+        {
+          "id": "rose",
+          "name": "Rose",
+          "initials": "RS",
+          "color": "#fda4af"
+        },
+        {
+          "id": "shared-rocks",
+          "name": "Shared Rocks",
+          "initials": "SR",
+          "color": "#a855f7"
+        }
       ],
-      "scorecard": { "trailingWeeks": 13, "measurables": [], "entries": {} },
+      "scorecard": {
+        "trailingWeeks": 13,
+        "measurables": [
+          {
+            "id": "back-office-sc1",
+            "title": "Month-end reports complete",
+            "owner": "la",
+            "goal": 1,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "back-office-sc2",
+            "title": "Reviews collected",
+            "owner": "la",
+            "goal": 1,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "back-office-sc3",
+            "title": "MSAs uploaded",
+            "owner": "la",
+            "goal": 1,
+            "goalType": "gte",
+            "unit": ""
+          }
+        ],
+        "entries": {}
+      },
       "rocks": [
-        { "id": "bo-d1", "title": "Emily - 1Q 2026 PH Payroll Processing", "owner": "la", "status": "complete", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-d2", "title": "Lanni - Complete the HR/Acctg Training Output on the Wix Website", "owner": "la", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-d3", "title": "Lanni - Monthly Recon of Invoices vs Payroll Rpts", "owner": "la", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-d4", "title": "Create a Monthly recon process of Benefit Enrollments, Payroll Reports, and Invoices", "owner": "la", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-d5", "title": "Aya - Getting 1 Review from a Client/Contractor for 1Q 2026", "owner": "la", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-d6", "title": "Acctg - Annual Aca filing, strict requirements", "owner": "la", "status": "on-track", "dueDate": "2026-04-30", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "bo-d7", "title": "Acctg - Continuous Update of Comprehensive Expense Tracker", "owner": "la", "status": "on-track", "dueDate": "2026-05-12", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "bo-d8", "title": "Emily - 2Q 2026 AI Tools", "owner": "la", "status": "on-track", "dueDate": "2026-06-30", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "bo-d9", "title": "Mary - Train Emily on Month-end Process 2Q 2026", "owner": "la", "status": "on-track", "dueDate": "2026-06-30", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "bo-a1", "title": "Getting 1 Review from Client/Contractor 1Q 2026 with Lhai", "owner": "aya", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-a2", "title": "Checking and uploading of MSA for new clients", "owner": "aya", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-a3", "title": "Research E-Verify and how to use it moving forward", "owner": "aya", "status": "off-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-a4", "title": "2026 Video Recording of NHOs", "owner": "aya", "status": "on-track", "dueDate": "2026-04-16", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "bo-l1", "title": "Send Out Quarterly Reminder on MSA Upload in Ceipal", "owner": "la", "status": "complete", "dueDate": "2025-11-14", "milestones": [], "archived": false, "quarter": "Q4 2025" },
-        { "id": "bo-l2", "title": "Mary - Create 2026 Contractor Masterlist", "owner": "la", "status": "complete", "dueDate": "2026-01-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-l3", "title": "Enable Rose to prepare Month End Reports independently", "owner": "la", "status": "complete", "dueDate": "2026-02-27", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-l4", "title": "Complete Assertiveness Training", "owner": "la", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-l5", "title": "Mary - Completion of WA Sales Tax Process", "owner": "la", "status": "complete", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-l6", "title": "Emily - 1Q 2026 PH Payroll Processing", "owner": "la", "status": "complete", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-l7", "title": "Complete HR/Acctg Training Output on Wix Website", "owner": "la", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-l8", "title": "Mary - Paying Tax Notices", "owner": "la", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-l9", "title": "Mary - SIT/SUI State Registration", "owner": "la", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-l10", "title": "Monthly Recon of Invoices vs Payroll Rpts", "owner": "la", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-l11", "title": "Monthly recon process of Benefit Enrollments", "owner": "la", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-l12", "title": "Aya - Getting 1 Review 1Q 2026", "owner": "la", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-l13", "title": "Annual Aca filing", "owner": "la", "status": "on-track", "dueDate": "2026-04-30", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "bo-l14", "title": "Mary - Sales Tax Process Review", "owner": "la", "status": "on-track", "dueDate": "2026-04-30", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "bo-l15", "title": "Continuous Update of Comprehensive Expense Tracker", "owner": "la", "status": "on-track", "dueDate": "2026-05-12", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "bo-l16", "title": "Emily - 2Q 2026 AI Tools", "owner": "la", "status": "on-track", "dueDate": "2026-06-30", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "bo-l17", "title": "Mary - Train Emily on Month-end Process", "owner": "la", "status": "on-track", "dueDate": "2026-06-30", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "bo-l18", "title": "Emily - 2Q 2026 AI Tools (see dscptn)", "owner": "la", "status": "on-track", "dueDate": "2026-06-30", "milestones": [], "archived": false, "quarter": "Q2 2026" },
-        { "id": "bo-s1", "title": "Mary - Train Emily for PH Payroll Process", "owner": "mary", "status": "complete", "dueDate": "2026-02-28", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-s2", "title": "Emily - Explore credit bureau reporting procedures", "owner": "emily", "status": "complete", "dueDate": "2025-12-31", "milestones": [], "archived": false, "quarter": "Q4 2025" },
-        { "id": "bo-s3", "title": "Lisa - Hyper care of month end process transition with Rose", "owner": "lisa", "status": "on-track", "dueDate": "2026-03-31", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-s4", "title": "Lisa - Adding Renewal/Policy Dates to Expense Tracker", "owner": "lisa", "status": "complete", "dueDate": "2026-02-27", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-s5", "title": "Mary - Simpler Version PTO Request", "owner": "mary", "status": "complete", "dueDate": "2026-01-09", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-s6", "title": "Mary - Simpler Pay Stub Downloading Tutorial", "owner": "mary", "status": "complete", "dueDate": "2026-01-09", "milestones": [], "archived": false, "quarter": "Q1 2026" },
-        { "id": "bo-s7", "title": "Mary - BH Connector Account Closure", "owner": "mary", "status": "on-track", "dueDate": "2026-04-30", "milestones": [], "archived": false, "quarter": "Q2 2026" }
+        {
+          "id": "bo-lanni-aguilan-1",
+          "title": "Emily- 1Q 2026 PH Payroll Processing",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-2",
+          "title": "Lanni - Complete the HR/Acctg Training Output on the Wix Website",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-3",
+          "title": "Lanni - Monthly Recon of Invoices (health bills) versus Payroll Rpts to catch Premium Variances",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-4",
+          "title": "Aya - Getting 1 Review from a Client/Contractor for 1Q 2026",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-5",
+          "title": "Mary - Implement New AR Aging Process (see dscrptn)",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-04-24",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-6",
+          "title": "Emily - Annual Aca filing, find out the strict requirements",
+          "owner": "la",
+          "status": "on-track",
+          "dueDate": "2026-04-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-7",
+          "title": "Acctg - Continuous Update of Comprehensive Expense Tracker",
+          "owner": "la",
+          "status": "on-track",
+          "dueDate": "2026-05-12",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-8",
+          "title": "Emily - 2Q 2026 AI Tool Ideas/Addition Request to be sent to Mike (see dscrptn)",
+          "owner": "la",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-9",
+          "title": "Mary - Train Emily on the Month-end Process due on 2Q 2026 (May 2026 EOM)",
+          "owner": "la",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-10",
+          "title": "Aya- Background Checks/Reference Checks (see description)",
+          "owner": "la",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-11",
+          "title": "Mary- Create 2026 Contractor Masterlist (complete info) until end of January",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-01-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-12",
+          "title": "To enable Rose to prepare all the Month End Reports independently by Jan 2026 Closing",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-02-27",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-13",
+          "title": "Mary - Completion of WA Sales Tax Process Until End of March",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-14",
+          "title": "Mary- Paying Tax Notices",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-15",
+          "title": "Mary- SIT/SUI State Registration",
+          "owner": "la",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-16",
+          "title": "Lanni - Complete Assertiveness Training",
+          "owner": "la",
+          "status": "on-track",
+          "dueDate": "2026-04-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-lanni-aguilan-17",
+          "title": "Mary - Complete the Sales Tax Process Review and Issue Resolution",
+          "owner": "la",
+          "status": "on-track",
+          "dueDate": "2026-04-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-aya-delos-santos-1",
+          "title": "Getting 1 Review from a Client/Contractor in 1st Quarter 2026- with Lhai",
+          "owner": "aya",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-aya-delos-santos-2",
+          "title": "Checking and uploading of MSA for new clients",
+          "owner": "aya",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-aya-delos-santos-3",
+          "title": "Research E-Verify and how to use it moving forward",
+          "owner": "aya",
+          "status": "on-track",
+          "dueDate": "2026-05-15",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-aya-delos-santos-4",
+          "title": "2026 Video Recording of NHOs",
+          "owner": "aya",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-aya-delos-santos-5",
+          "title": "Getting 1 review from a Client/Contractor in 2nd Quarter 2026",
+          "owner": "aya",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-aya-delos-santos-6",
+          "title": "Checking and uploading of MSA for new clients- 2nd Quarter",
+          "owner": "aya",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-shared-rocks-1",
+          "title": "Mary - Train Emily for PH Payroll Process until end of February 2026",
+          "owner": "shared-rocks",
+          "status": "complete",
+          "dueDate": "2026-02-28",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-shared-rocks-2",
+          "title": "Lisa - Hyper care of transition of month end process with Rose",
+          "owner": "shared-rocks",
+          "status": "complete",
+          "dueDate": "2026-03-31",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-shared-rocks-3",
+          "title": "Lisa - Adding Renewal Dates and Policy Dates to the Comprehensive Expense Tracker",
+          "owner": "shared-rocks",
+          "status": "complete",
+          "dueDate": "2026-02-27",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-shared-rocks-4",
+          "title": "Mary - Simpler Version PTO Request",
+          "owner": "shared-rocks",
+          "status": "complete",
+          "dueDate": "2026-01-09",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-shared-rocks-5",
+          "title": "Mary - Simpler version Pay Stub Downloading Tutorial",
+          "owner": "shared-rocks",
+          "status": "complete",
+          "dueDate": "2026-01-09",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "bo-shared-rocks-6",
+          "title": "Mary - BH Connector Account Closure",
+          "owner": "shared-rocks",
+          "status": "on-track",
+          "dueDate": "2026-04-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        }
       ],
       "todos": [],
-      "issues": { "shortTerm": [], "longTerm": [] },
+      "issues": {
+        "shortTerm": [],
+        "longTerm": []
+      },
       "meetings": []
     },
     {
       "id": "eos-training",
       "name": "EOS Training",
       "members": [
-        { "id": "md", "name": "Mike Dades", "initials": "MD", "color": "#6366f1" },
-        { "id": "jb", "name": "Jon Bobillo", "initials": "JB", "color": "#8b5cf6" },
-        { "id": "la", "name": "Lanni Aguilan", "initials": "LA", "color": "#ec4899" },
-        { "id": "lv", "name": "Liza Valencia-Vilog", "initials": "LV", "color": "#14b8a6" }
+        {
+          "id": "md",
+          "name": "Mike Dades",
+          "initials": "MD",
+          "color": "#6366f1"
+        },
+        {
+          "id": "jb",
+          "name": "Jon Bobillo",
+          "initials": "JB",
+          "color": "#8b5cf6"
+        },
+        {
+          "id": "la",
+          "name": "Lanni Aguilan",
+          "initials": "LA",
+          "color": "#ec4899"
+        },
+        {
+          "id": "lv",
+          "name": "Liza Valencia-Vilog",
+          "initials": "LV",
+          "color": "#14b8a6"
+        }
       ],
-      "scorecard": { "trailingWeeks": 13, "measurables": [], "entries": {} },
+      "scorecard": {
+        "trailingWeeks": 13,
+        "measurables": [],
+        "entries": {}
+      },
       "rocks": [],
       "todos": [],
-      "issues": { "shortTerm": [], "longTerm": [] },
+      "issues": {
+        "shortTerm": [],
+        "longTerm": []
+      },
       "meetings": []
     },
     {
       "id": "support-specialists",
       "name": "Support Specialists",
-      "members": [],
-      "scorecard": { "trailingWeeks": 13, "measurables": [], "entries": {} },
-      "rocks": [],
+      "members": [
+        {
+          "id": "jean-michelle-tayco",
+          "name": "Jean Michelle Tayco",
+          "initials": "JM",
+          "color": "#6366f1"
+        },
+        {
+          "id": "joel-yaco",
+          "name": "Joel Yaco",
+          "initials": "JY",
+          "color": "#8b5cf6"
+        },
+        {
+          "id": "jon-bobillo",
+          "name": "Jon Bobillo",
+          "initials": "JB",
+          "color": "#ec4899"
+        }
+      ],
+      "scorecard": {
+        "trailingWeeks": 13,
+        "measurables": [
+          {
+            "id": "support-specialists-sc1",
+            "title": "Meetings delivered",
+            "owner": "jean-michelle-tayco",
+            "goal": 48,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "support-specialists-sc2",
+            "title": "Sourced leads",
+            "owner": "jean-michelle-tayco",
+            "goal": 3800,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "support-specialists-sc3",
+            "title": "Jobs created",
+            "owner": "jean-michelle-tayco",
+            "goal": 3,
+            "goalType": "gte",
+            "unit": ""
+          },
+          {
+            "id": "support-specialists-sc4",
+            "title": "Endorsements",
+            "owner": "jean-michelle-tayco",
+            "goal": 65,
+            "goalType": "gte",
+            "unit": ""
+          }
+        ],
+        "entries": {}
+      },
+      "rocks": [
+        {
+          "id": "ss-jean-michelle-tayco-1",
+          "title": "Deliver 48 meetings by end of Q2",
+          "owner": "jean-michelle-tayco",
+          "status": "off-track",
+          "dueDate": "2026-07-12",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-jean-michelle-tayco-2",
+          "title": "Increase monthly jobs from 1 to 3 by end of Q2",
+          "owner": "jean-michelle-tayco",
+          "status": "off-track",
+          "dueDate": "2026-07-12",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-joel-yaco-1",
+          "title": "65 endorsements by the end of Q2",
+          "owner": "joel-yaco",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-joel-yaco-2",
+          "title": "2 BDMs by June 30",
+          "owner": "joel-yaco",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-joel-yaco-3",
+          "title": "2 technical recruiters by June 30",
+          "owner": "joel-yaco",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-jon-bobillo-1",
+          "title": "Jon - Discuss Rec Leads to Mike due Apr 24",
+          "owner": "jon-bobillo",
+          "status": "on-track",
+          "dueDate": "2026-04-10",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-jon-bobillo-2",
+          "title": "Nats - 3800 Sourced Leads",
+          "owner": "jon-bobillo",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-jon-bobillo-3",
+          "title": "Nats - 48 Total Meetings set by End of Q2",
+          "owner": "jon-bobillo",
+          "status": "off-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-jon-bobillo-4",
+          "title": "Nats - 3 Jobs by End of Q2",
+          "owner": "jon-bobillo",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-jon-bobillo-5",
+          "title": "Jhe - 3800 Sourced Leads by End of Q2",
+          "owner": "jon-bobillo",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-jon-bobillo-6",
+          "title": "Jhe - 3 Jobs by End of Q2",
+          "owner": "jon-bobillo",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-jon-bobillo-7",
+          "title": "Jhe - 48 Total Meetings set by End of Q2",
+          "owner": "jon-bobillo",
+          "status": "off-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-jon-bobillo-8",
+          "title": "Dee - 3 jobs by end of Q2",
+          "owner": "jon-bobillo",
+          "status": "off-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-jon-bobillo-9",
+          "title": "Dee - Set 48 Meetings by end of Q2",
+          "owner": "jon-bobillo",
+          "status": "off-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-jon-bobillo-10",
+          "title": "Dee - Source 2600 hiring managers by end of Q2",
+          "owner": "jon-bobillo",
+          "status": "on-track",
+          "dueDate": "2026-06-30",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        },
+        {
+          "id": "ss-jon-bobillo-11",
+          "title": "Jon - Create Sales Tool Playbook by end of Q2",
+          "owner": "jon-bobillo",
+          "status": "on-track",
+          "dueDate": "2026-07-13",
+          "milestones": [],
+          "archived": false,
+          "quarter": "Q2 2026"
+        }
+      ],
       "todos": [],
-      "issues": { "shortTerm": [], "longTerm": [] },
+      "issues": {
+        "shortTerm": [],
+        "longTerm": []
+      },
       "meetings": []
     }
   ],
   "vto": {
     "coreValues": [
-      { "title": "Character", "description": "We act with integrity and do the right thing, even when no one is watching." },
-      { "title": "Grit", "description": "We push through challenges with resilience and determination." },
-      { "title": "Results", "description": "We are driven by outcomes and hold ourselves accountable to delivering." }
+      {
+        "title": "Character",
+        "description": "We act with integrity and do the right thing, even when no one is watching."
+      },
+      {
+        "title": "Grit",
+        "description": "We push through challenges with resilience and determination."
+      },
+      {
+        "title": "Results",
+        "description": "We are driven by outcomes and hold ourselves accountable to delivering."
+      }
     ],
     "coreFocus": {
       "purpose": "Transforming Businesses and Careers",
@@ -209,9 +1518,18 @@
     "marketingStrategy": {
       "targetMarket": "Tech, Finance, Marketing, Creative Hiring Managers, 50-5000 employees, No VMS, US (Seattle, NC, FL, TX)",
       "threeUniques": [
-        { "title": "Retention", "description": "0% unwanted attrition" },
-        { "title": "Company Rating", "description": "Highest-rated staffing firm in WA" },
-        { "title": "Close Rate", "description": "100% on exclusives" }
+        {
+          "title": "Retention",
+          "description": "0% unwanted attrition"
+        },
+        {
+          "title": "Company Rating",
+          "description": "Highest-rated staffing firm in WA"
+        },
+        {
+          "title": "Close Rate",
+          "description": "100% on exclusives"
+        }
       ],
       "provenProcess": "One-Pager",
       "guarantee": "FTE Yes, Contract Backfill, Global Delivery Yes"
@@ -240,7 +1558,14 @@
       "title": "Visionary",
       "person": "Mike Dades",
       "ownerId": "md",
-      "roles": ["20 Ideas", "Creativity", "Big Relationships", "Culture", "R&D", "More on Emotion"],
+      "roles": [
+        "20 Ideas",
+        "Creativity",
+        "Big Relationships",
+        "Culture",
+        "R&D",
+        "More on Emotion"
+      ],
       "parentId": null
     },
     {
@@ -248,7 +1573,14 @@
       "title": "Integrator",
       "person": "Jon Bobillo",
       "ownerId": "jb",
-      "roles": ["LMA", "P&L", "Remove Obstacles", "Special Projects", "Core Processes", "More on Logic"],
+      "roles": [
+        "LMA",
+        "P&L",
+        "Remove Obstacles",
+        "Special Projects",
+        "Core Processes",
+        "More on Logic"
+      ],
       "parentId": null
     },
     {
@@ -256,7 +1588,13 @@
       "title": "Sales",
       "person": "Mike Dades",
       "ownerId": "md",
-      "roles": ["LMA", "Sales/Revenue Goal", "Selling", "Marketing", "Sales & Marketing Process"],
+      "roles": [
+        "LMA",
+        "Sales/Revenue Goal",
+        "Selling",
+        "Marketing",
+        "Sales & Marketing Process"
+      ],
       "parentId": "ac2"
     },
     {
@@ -264,7 +1602,15 @@
       "title": "Operations",
       "person": "Jon Bobillo",
       "ownerId": "jb",
-      "roles": ["LMA", "Process Improvement", "Tools/Process Mgmt", "Special Projects", "Internal Hiring", "Employee Relations", "Reporting"],
+      "roles": [
+        "LMA",
+        "Process Improvement",
+        "Tools/Process Mgmt",
+        "Special Projects",
+        "Internal Hiring",
+        "Employee Relations",
+        "Reporting"
+      ],
       "parentId": "ac2"
     },
     {
@@ -272,7 +1618,15 @@
       "title": "HR and Finance",
       "person": "Lanni Aguilan",
       "ownerId": "la",
-      "roles": ["LMA", "AR/AP", "Budgeting", "Reporting", "HR/Admin", "IT", "Office Management"],
+      "roles": [
+        "LMA",
+        "AR/AP",
+        "Budgeting",
+        "Reporting",
+        "HR/Admin",
+        "IT",
+        "Office Management"
+      ],
       "parentId": "ac2"
     },
     {
@@ -283,5 +1637,6 @@
       "roles": [],
       "parentId": "ac2"
     }
-  ]
+  ],
+  "version": "2026-04-28-team-data-v2"
 }

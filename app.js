@@ -3,6 +3,7 @@
 'use strict';
 
 const STORAGE_KEY = 'rylem_eos';
+const DATA_VERSION = '2026-04-28-team-data-v2';
 const TEAM_KEY = 'rylem_eos_team';
 let DATA = null;
 let currentModule = 'my90';
@@ -17,11 +18,21 @@ async function loadData() {
     // Migration: if old flat format, convert
     if (DATA.team && !DATA.teams) {
       DATA = migrateToMultiTeam(DATA);
+      DATA.version = DATA_VERSION;
+      saveData();
+    }
+    // Force-refresh seeded Ninety data when the app data model changes.
+    // User-created browser-only edits are intentionally secondary to keeping the clone current with Ninety.
+    if (DATA.version !== DATA_VERSION) {
+      const resp = await fetch('data/seed.json?v=' + DATA_VERSION);
+      DATA = await resp.json();
+      DATA.version = DATA_VERSION;
       saveData();
     }
   } else {
-    const resp = await fetch('data/seed.json');
+    const resp = await fetch('data/seed.json?v=' + DATA_VERSION);
     DATA = await resp.json();
+    DATA.version = DATA_VERSION;
     saveData();
   }
 }
@@ -1726,8 +1737,9 @@ function renderSettings(el) {
   document.getElementById('resetBtn').addEventListener('click', async () => {
     if (!confirm('Are you sure? This will reset ALL data to defaults.')) return;
     localStorage.removeItem(STORAGE_KEY);
-    const resp = await fetch('data/seed.json');
+    const resp = await fetch('data/seed.json?v=' + DATA_VERSION);
     DATA = await resp.json();
+    DATA.version = DATA_VERSION;
     saveData();
     initTeamSwitcher();
     renderSettings(el);
