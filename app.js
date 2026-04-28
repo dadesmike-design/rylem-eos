@@ -3,7 +3,7 @@
 'use strict';
 
 const STORAGE_KEY = 'rylem_eos';
-const DATA_VERSION = '2026-04-28-team-data-v2';
+const DATA_VERSION = '2026-04-28-scorecard-v3';
 const TEAM_KEY = 'rylem_eos_team';
 let DATA = null;
 let currentModule = 'my90';

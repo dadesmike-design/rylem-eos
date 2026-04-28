@@ -888,37 +888,350 @@
           "name": "Shared Rocks",
           "initials": "SR",
           "color": "#a855f7"
+        },
+        {
+          "id": "hr-specialist",
+          "name": "HR Specialist",
+          "initials": "HS",
+          "color": "#0ea5e9"
+        },
+        {
+          "id": "senior-accountant",
+          "name": "Senior Accountant",
+          "initials": "SA",
+          "color": "#22d3ee"
+        },
+        {
+          "id": "accounting-analyst",
+          "name": "Accounting Analyst",
+          "initials": "AA",
+          "color": "#84cc16"
+        },
+        {
+          "id": "accounting-associate",
+          "name": "Accounting Associate",
+          "initials": "AA",
+          "color": "#fb923c"
         }
       ],
       "scorecard": {
         "trailingWeeks": 13,
         "measurables": [
           {
-            "id": "back-office-sc1",
-            "title": "Month-end reports complete",
-            "owner": "la",
-            "goal": 1,
-            "goalType": "gte",
-            "unit": ""
+            "id": "bo-sc-1",
+            "title": "Checking of Cobra participants/daily status report from Cobra",
+            "owner": "hr-specialist",
+            "group": "HR Specialist",
+            "goal": "Yes",
+            "goalType": "eq",
+            "unit": "",
+            "average": "100.00%",
+            "total": "6"
           },
           {
-            "id": "back-office-sc2",
-            "title": "Reviews collected",
-            "owner": "la",
-            "goal": 1,
+            "id": "bo-sc-2",
+            "title": "100% Response Rate to All Emails within 24 hours",
+            "owner": "hr-specialist",
+            "group": "HR Specialist",
+            "goal": 100,
             "goalType": "gte",
-            "unit": ""
+            "unit": "%",
+            "average": "100%",
+            "total": "600%"
           },
           {
-            "id": "back-office-sc3",
-            "title": "MSAs uploaded",
-            "owner": "la",
-            "goal": 1,
+            "id": "bo-sc-3",
+            "title": "100% Response Rate to All Emails within 24 Hours",
+            "owner": "senior-accountant",
+            "group": "Senior Accountant",
+            "goal": 100,
+            "goalType": "eq",
+            "unit": "%",
+            "average": "100%",
+            "total": "1,100%"
+          },
+          {
+            "id": "bo-sc-4",
+            "title": "100% billing of full time placements/coversion to FTE on start date",
+            "owner": "senior-accountant",
+            "group": "Senior Accountant",
+            "goal": 100,
+            "goalType": "eq",
+            "unit": "%",
+            "average": "100%",
+            "total": "1,100%"
+          },
+          {
+            "id": "bo-sc-5",
+            "title": "Paying weekly bills on time",
+            "owner": "senior-accountant",
+            "group": "Senior Accountant",
+            "goal": 100,
+            "goalType": "eq",
+            "unit": "%",
+            "average": "100%",
+            "total": "1,100%"
+          },
+          {
+            "id": "bo-sc-6",
+            "title": "Scanned Mail Review due 2-3 days after receipt",
+            "owner": "senior-accountant",
+            "group": "Senior Accountant",
+            "goal": 100,
+            "goalType": "eq",
+            "unit": "%",
+            "average": "100%",
+            "total": "1,100%"
+          },
+          {
+            "id": "bo-sc-7",
+            "title": "Weekly updating of bank transactions in QB for AR aging every Frida",
+            "owner": "senior-accountant",
+            "group": "Senior Accountant",
+            "goal": 100,
             "goalType": "gte",
-            "unit": ""
+            "unit": "%",
+            "average": "100%",
+            "total": "1,100%"
+          },
+          {
+            "id": "bo-sc-8",
+            "title": "100% Response Rate to All Emails within 24 Hours",
+            "owner": "accounting-analyst",
+            "group": "Accounting Analyst",
+            "goal": 100,
+            "goalType": "eq",
+            "unit": "%",
+            "average": "100%",
+            "total": "1,100%"
+          },
+          {
+            "id": "bo-sc-9",
+            "title": "Scanned Mail Review due 2-3 days after receipt",
+            "owner": "accounting-analyst",
+            "group": "Accounting Analyst",
+            "goal": 100,
+            "goalType": "eq",
+            "unit": "%",
+            "average": "100%",
+            "total": "1,100%"
+          },
+          {
+            "id": "bo-sc-10",
+            "title": "Preparation of Accounting Scorecard due every Monday",
+            "owner": "accounting-analyst",
+            "group": "Accounting Analyst",
+            "goal": 100,
+            "goalType": "eq",
+            "unit": "%",
+            "average": "100%",
+            "total": "1,100%"
+          },
+          {
+            "id": "bo-sc-11",
+            "title": "100% Response Rate to All Emails within 24 Hours",
+            "owner": "accounting-associate",
+            "group": "Accounting Associate",
+            "goal": 100,
+            "goalType": "eq",
+            "unit": "%",
+            "average": "100%",
+            "total": "1,100%"
+          },
+          {
+            "id": "bo-sc-12",
+            "title": "Weekly Billing Process",
+            "owner": "accounting-associate",
+            "group": "Accounting Associate",
+            "goal": 100,
+            "goalType": "eq",
+            "unit": "%",
+            "average": "100%",
+            "total": "1,100%"
+          },
+          {
+            "id": "bo-sc-13",
+            "title": "Scanned Mail Review due 2-3 days after receipt",
+            "owner": "accounting-associate",
+            "group": "Accounting Associate",
+            "goal": 100,
+            "goalType": "eq",
+            "unit": "%",
+            "average": "100%",
+            "total": "1,100%"
           }
         ],
-        "entries": {}
+        "entries": {
+          "bo-sc-1": {
+            "2026-W18": "Yes",
+            "2026-W17": "Yes",
+            "2026-W16": "Yes",
+            "2026-W15": "Yes",
+            "2026-W14": "Yes",
+            "2026-W13": "100%",
+            "2026-W12": "100%",
+            "2026-W11": "100%",
+            "2026-W10": "100%",
+            "2026-W09": "100%",
+            "2026-W08": ""
+          },
+          "bo-sc-2": {
+            "2026-W18": "100%",
+            "2026-W17": "100%",
+            "2026-W16": "100%",
+            "2026-W15": "100%",
+            "2026-W14": "100%",
+            "2026-W13": "100%",
+            "2026-W12": "100%",
+            "2026-W11": "100%",
+            "2026-W10": "100%",
+            "2026-W09": "100%",
+            "2026-W08": "100%"
+          },
+          "bo-sc-3": {
+            "2026-W18": "100%",
+            "2026-W17": "100%",
+            "2026-W16": "100%",
+            "2026-W15": "100%",
+            "2026-W14": "100%",
+            "2026-W13": "100%",
+            "2026-W12": "100%",
+            "2026-W11": "100%",
+            "2026-W10": "100%",
+            "2026-W09": "100%",
+            "2026-W08": "100%"
+          },
+          "bo-sc-4": {
+            "2026-W18": "100%",
+            "2026-W17": "100%",
+            "2026-W16": "100%",
+            "2026-W15": "100%",
+            "2026-W14": "100%",
+            "2026-W13": "100%",
+            "2026-W12": "100%",
+            "2026-W11": "100%",
+            "2026-W10": "100%",
+            "2026-W09": "100%",
+            "2026-W08": "100%"
+          },
+          "bo-sc-5": {
+            "2026-W18": "100%",
+            "2026-W17": "100%",
+            "2026-W16": "100%",
+            "2026-W15": "100%",
+            "2026-W14": "100%",
+            "2026-W13": "100%",
+            "2026-W12": "100%",
+            "2026-W11": "100%",
+            "2026-W10": "100%",
+            "2026-W09": "100%",
+            "2026-W08": "100%"
+          },
+          "bo-sc-6": {
+            "2026-W18": "100%",
+            "2026-W17": "100%",
+            "2026-W16": "100%",
+            "2026-W15": "100%",
+            "2026-W14": "100%",
+            "2026-W13": "100%",
+            "2026-W12": "100%",
+            "2026-W11": "100%",
+            "2026-W10": "100%",
+            "2026-W09": "100%",
+            "2026-W08": "100%"
+          },
+          "bo-sc-7": {
+            "2026-W18": "100%",
+            "2026-W17": "100%",
+            "2026-W16": "100%",
+            "2026-W15": "100%",
+            "2026-W14": "100%",
+            "2026-W13": "100%",
+            "2026-W12": "100%",
+            "2026-W11": "100%",
+            "2026-W10": "100%",
+            "2026-W09": "100%",
+            "2026-W08": "100%"
+          },
+          "bo-sc-8": {
+            "2026-W18": "100%",
+            "2026-W17": "100%",
+            "2026-W16": "100%",
+            "2026-W15": "100%",
+            "2026-W14": "100%",
+            "2026-W13": "100%",
+            "2026-W12": "100%",
+            "2026-W11": "100%",
+            "2026-W10": "100%",
+            "2026-W09": "100%",
+            "2026-W08": "100%"
+          },
+          "bo-sc-9": {
+            "2026-W18": "100%",
+            "2026-W17": "100%",
+            "2026-W16": "100%",
+            "2026-W15": "100%",
+            "2026-W14": "100%",
+            "2026-W13": "100%",
+            "2026-W12": "100%",
+            "2026-W11": "100%",
+            "2026-W10": "100%",
+            "2026-W09": "100%",
+            "2026-W08": "100%"
+          },
+          "bo-sc-10": {
+            "2026-W18": "100%",
+            "2026-W17": "100%",
+            "2026-W16": "100%",
+            "2026-W15": "100%",
+            "2026-W14": "100%",
+            "2026-W13": "100%",
+            "2026-W12": "100%",
+            "2026-W11": "100%",
+            "2026-W10": "100%",
+            "2026-W09": "100%",
+            "2026-W08": "100%"
+          },
+          "bo-sc-11": {
+            "2026-W18": "100%",
+            "2026-W17": "100%",
+            "2026-W16": "100%",
+            "2026-W15": "100%",
+            "2026-W14": "100%",
+            "2026-W13": "100%",
+            "2026-W12": "100%",
+            "2026-W11": "100%",
+            "2026-W10": "100%",
+            "2026-W09": "100%",
+            "2026-W08": "100%"
+          },
+          "bo-sc-12": {
+            "2026-W18": "100%",
+            "2026-W17": "100%",
+            "2026-W16": "100%",
+            "2026-W15": "100%",
+            "2026-W14": "100%",
+            "2026-W13": "100%",
+            "2026-W12": "100%",
+            "2026-W11": "100%",
+            "2026-W10": "100%",
+            "2026-W09": "100%",
+            "2026-W08": "100%"
+          },
+          "bo-sc-13": {
+            "2026-W18": "100%",
+            "2026-W17": "100%",
+            "2026-W16": "100%",
+            "2026-W15": "100%",
+            "2026-W14": "100%",
+            "2026-W13": "100%",
+            "2026-W12": "100%",
+            "2026-W11": "100%",
+            "2026-W10": "100%",
+            "2026-W09": "100%",
+            "2026-W08": "100%"
+          }
+        }
       },
       "rocks": [
         {
@@ -1638,5 +1951,5 @@
       "parentId": "ac2"
     }
   ],
-  "version": "2026-04-28-team-data-v2"
+  "version": "2026-04-28-scorecard-v3"
 }
